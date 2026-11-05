@@ -1,0 +1,271 @@
+README and results figure verification
+
+{
+  "local_links_and_anchors": "passed",
+  "excluded_company_scan": "clear",
+  "preserved_source_and_evidence_files": 1395,
+  "original_bytes_unchanged": true,
+  "svg_accessibility": "title, description and complete README alt text",
+  "visual_inspection": "normal, narrow and grayscale checked",
+  "readme_words": 804
+}
+
+
+Preserved benchmark audit
+{
+  "trials": 144,
+  "matched_groups": 36,
+  "generated": 79236,
+  "completed": 79236,
+  "not_completed": 0,
+  "reservation_and_final_queue_invariants": "passed",
+  "matched_workloads_and_configuration": "passed",
+  "latency_decomposition": "passed"
+}
+
+
+Native suite
+./build/core-test
+core: 18 checks passed
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_schedule_covers_each_combination_and_repeats_order (test_bench.BenchTest.test_schedule_covers_each_combination_and_repeats_order) ... ok
+test_seed_parser_rejects_ambiguous_and_invalid_inputs (test_bench.BenchTest.test_seed_parser_rejects_ambiguous_and_invalid_inputs) ... ok
+test_archive_manifest_detects_changed_files (test_bundle.BundleTest.test_archive_manifest_detects_changed_files) ... ok
+test_bundle_rejects_escape_and_symlinks (test_bundle.BundleTest.test_bundle_rejects_escape_and_symlinks) ... ok
+test_bundle_rejects_reserved_metadata_names (test_bundle.BundleTest.test_bundle_rejects_reserved_metadata_names) ... ok
+test_strict_verification_rejects_unlisted_files (test_bundle.BundleTest.test_strict_verification_rejects_unlisted_files) ... ok
+test_failed_test_retains_process_artifacts (test_diagnostics.DiagnosticsTest.test_failed_test_retains_process_artifacts) ... ok
+test_all_four_modes_complete_and_respect_budget (test_network.NetworkTest.test_all_four_modes_complete_and_respect_budget) ... ok
+test_corrupt_body_never_gets_success_ack (test_network.NetworkTest.test_corrupt_body_never_gets_success_ack) ... ok
+test_idle_sink_connection_can_be_reused (test_network.NetworkTest.test_idle_sink_connection_can_be_reused) ... ok
+test_invalid_options_fail (test_network.NetworkTest.test_invalid_options_fail) ... ok
+test_low_rate_producers_keep_idle_connections (test_network.NetworkTest.test_low_rate_producers_keep_idle_connections) ... ok
+test_overload_accounts_for_every_generated_item (test_network.NetworkTest.test_overload_accounts_for_every_generated_item) ... ok
+test_oversized_header_is_rejected_without_body (test_network.NetworkTest.test_oversized_header_is_rejected_without_body) ... ok
+test_producer_termination_interrupts_scheduled_wait (test_network.NetworkTest.test_producer_termination_interrupts_scheduled_wait) ... ok
+test_sink_loss_produces_explicit_unknown_outcomes (test_network.NetworkTest.test_sink_loss_produces_explicit_unknown_outcomes) ... ok
+test_stalled_body_releases_reservation (test_network.NetworkTest.test_stalled_body_releases_reservation) ... ok
+test_impossible_completed_timestamps_are_rejected (test_report.ReportTest.test_impossible_completed_timestamps_are_rejected) ... ok
+test_matching_modes_require_same_experiment_and_binary (test_report.ReportTest.test_matching_modes_require_same_experiment_and_binary) ... ok
+test_paired_comparison_validates_inputs_and_preserves_failures (test_report.ReportTest.test_paired_comparison_validates_inputs_and_preserves_failures) ... ok
+test_report_includes_losses_and_uses_nearest_rank (test_report.ReportTest.test_report_includes_losses_and_uses_nearest_rank) ... ok
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... ok
+test_fifo_preserves_order_in_both_admission_modes (test_scheduling.SchedulingTest.test_fifo_preserves_order_in_both_admission_modes) ... ok
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... ok
+test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) ... ok
+test_ready_fifo_preserves_order (test_service_priority.ServicePriorityTest.test_ready_fifo_preserves_order) ... ok
+
+----------------------------------------------------------------------
+Ran 26 tests in 10.610s
+
+OK
+
+
+Compose quickstart functional smoke (100 ms windows, not performance evidence)
+$ docker compose --project-name prento-readme-check --profile bench run --build --rm benchmark --output /results/run --seeds 7 --repeats 1 --duration-ms 100
+ Volume prento-readme-check_bench-results Creating 
+ Volume prento-readme-check_bench-results Creating 
+ Network prento-readme-check_default Creating 
+ Network prento-readme-check_default Creating 
+ Volume prento-readme-check_bench-results Created 
+ Volume prento-readme-check_bench-results Created 
+ Network prento-readme-check_default Created 
+ Network prento-readme-check_default Created 
+ Image prento:bench Building 
+#1 [internal] load local bake definitions
+#1 reading from stdin 608B done
+#1 DONE 0.0s
+
+#2 [internal] load build definition from Dockerfile
+#2 transferring dockerfile: 1.57kB 0.1s done
+#2 DONE 0.1s
+
+#3 [internal] load metadata for docker.io/library/ubuntu:24.04
+#3 DONE 0.0s
+
+#4 [internal] load .dockerignore
+#4 transferring context: 112B 0.1s done
+#4 DONE 0.1s
+
+#5 [internal] load build context
+#5 DONE 0.0s
+
+#6 [build 1/8] FROM docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9
+#6 resolve docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9 0.0s done
+#6 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 767B 0.1s done
+#5 DONE 0.2s
+
+#7 [build 7/8] COPY tests/core_test.cpp ./tests/core_test.cpp
+#7 CACHED
+
+#8 [bench 1/3] RUN apt-get update && apt-get install -y --no-install-recommends     python3 && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [runtime 2/4] RUN apt-get update && apt-get install -y --no-install-recommends     libstdc++6 libgcc-s1 && rm -rf /var/lib/apt/lists/*     && mkdir /results && chown 10001:10001 /results
+#9 CACHED
+
+#10 [build 3/8] WORKDIR /src
+#10 CACHED
+
+#11 [build 4/8] COPY CMakeLists.txt ./
+#11 CACHED
+
+#12 [build 6/8] COPY src ./src
+#12 CACHED
+
+#13 [runtime 4/4] WORKDIR /tmp
+#13 CACHED
+
+#14 [build 5/8] COPY include ./include
+#14 CACHED
+
+#15 [bench 2/3] COPY scripts /lab/scripts
+#15 CACHED
+
+#16 [build 8/8] RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release     && cmake --build build && ctest --test-dir build --output-on-failure
+#16 CACHED
+
+#17 [runtime 3/4] COPY --from=build /src/build/prento /usr/local/bin/prento
+#17 CACHED
+
+#18 [build 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     g++ cmake ninja-build ca-certificates && rm -rf /var/lib/apt/lists/*
+#18 CACHED
+
+#19 [bench 3/3] RUN mkdir -p /results && chown 10001:10001 /results
+#19 CACHED
+
+#20 exporting to image
+#20 exporting layers done
+#20 exporting manifest sha256:de8a75c1bb37b2ef0488058c2fad658115cb6140b8192174c55d2e2f1f5f7f80 done
+#20 exporting config sha256:6e0b5d429c4e1e4efb2d373e5821b33c294a3c0f86fdb577aaabb33c924737ea done
+#20 exporting attestation manifest sha256:370e136939deee4921409347f04f4096f528e44a8b78908e627c8cce172cd5af 0.0s done
+#20 exporting manifest list sha256:9ae49b85a2d645acc6187683eb3b33b79bfdb3f955a694fca19268e869125a3e 0.0s done
+#20 naming to docker.io/library/prento:bench done
+#20 unpacking to docker.io/library/prento:bench done
+#20 DONE 0.1s
+
+#21 resolving provenance for metadata file
+#21 DONE 0.0s
+ Image prento:bench Built 
+ Container prento-readme-check-benchmark-run-12a227defcbf Creating 
+ Container prento-readme-check-benchmark-run-12a227defcbf Created 
+burst-seed-7-credit-priority-1: generated=15 completed=15 drops=0 unknown=0
+slow-seed-7-push-priority-1: generated=10 completed=10 drops=0 unknown=0
+burst-seed-7-push-priority-1: generated=15 completed=15 drops=0 unknown=0
+burst-seed-7-credit-fifo-1: generated=15 completed=15 drops=0 unknown=0
+outage-seed-7-credit-fifo-1: generated=10 completed=10 drops=0 unknown=0
+slow-seed-7-credit-fifo-1: generated=10 completed=10 drops=0 unknown=0
+outage-seed-7-push-fifo-1: generated=10 completed=10 drops=0 unknown=0
+slow-seed-7-push-fifo-1: generated=10 completed=10 drops=0 unknown=0
+steady-seed-7-push-priority-1: generated=10 completed=10 drops=0 unknown=0
+steady-seed-7-credit-fifo-1: generated=10 completed=10 drops=0 unknown=0
+outage-seed-7-push-priority-1: generated=10 completed=10 drops=0 unknown=0
+outage-seed-7-credit-priority-1: generated=10 completed=10 drops=0 unknown=0
+burst-seed-7-push-fifo-1: generated=15 completed=15 drops=0 unknown=0
+slow-seed-7-credit-priority-1: generated=10 completed=10 drops=0 unknown=0
+steady-seed-7-push-fifo-1: generated=10 completed=10 drops=0 unknown=0
+steady-seed-7-credit-priority-1: generated=10 completed=10 drops=0 unknown=0
+report: /results/run/REPORT.md
+$ docker compose --project-name prento-readme-check --profile bench run --rm --entrypoint cat benchmark /results/run/REPORT.md
+ Volume prento-readme-check_bench-results Removing 
+ Network prento-readme-check_default Removing 
+ Volume prento-readme-check_bench-results Removed 
+ Network prento-readme-check_default Removed 
+# Measured fan-in results
+
+16 trials; workload seeds [7]. Each run is weighted equally in mean breakdowns. Repeats of a seed are timing repeats, not new workloads.
+
+Outcomes: 180 generated; 180 completed; 0 producer drops; 0 delivery-unknown outcomes.
+
+Pre-send includes scheduled-generation lateness, producer queueing, payload preparation and connection setup. Post-send includes transfer, admission/ready-work waiting, sink processing and ACK. It is not an isolated collector-queue measurement.
+
+Latency statistics describe completed messages. Read completion counts and per-seed variation alongside them. These finite laptop runs do not establish a production capacity or tail SLO.
+
+## Mean critical-message latency breakdown
+
+| Scenario | Mode | Critical completed / generated | Pre-send ms | Post-send ms | Total ms | Per-seed mean range ms |
+|---|---|---:|---:|---:|---:|---:|
+| burst | credit/fifo | 0/0 | — | — | — | —–— |
+| burst | credit/priority | 0/0 | — | — | — | —–— |
+| burst | push/fifo | 0/0 | — | — | — | —–— |
+| burst | push/priority | 0/0 | — | — | — | —–— |
+| outage | credit/fifo | 0/0 | — | — | — | —–— |
+| outage | credit/priority | 0/0 | — | — | — | —–— |
+| outage | push/fifo | 0/0 | — | — | — | —–— |
+| outage | push/priority | 0/0 | — | — | — | —–— |
+| slow | credit/fifo | 0/0 | — | — | — | —–— |
+| slow | credit/priority | 0/0 | — | — | — | —–— |
+| slow | push/fifo | 0/0 | — | — | — | —–— |
+| slow | push/priority | 0/0 | — | — | — | —–— |
+| steady | credit/fifo | 0/0 | — | — | — | —–— |
+| steady | credit/priority | 0/0 | — | — | — | —–— |
+| steady | push/fifo | 0/0 | — | — | — | —–— |
+| steady | push/priority | 0/0 | — | — | — | —–— |
+
+![Latency decomposition](latency-breakdown.svg)
+
+## Matched end-to-end comparisons
+
+Inputs match by logical ID, producer, class, bytes and intended relative schedule within each scenario/seed/repeat. All completed pairs are retained; no post-hoc overload filter is used. Completion-status changes are recorded separately. Positive reduction favors the candidate. Percentages compare mean latencies, not mean per-message percentages. Per-seed ranges are descriptive, not confidence intervals.
+
+| Scenario | Reference → candidate | Mean critical reduction % | Per-seed reduction range % | Faster critical / completed pairs |
+|---|---|---:|---:|---:|
+
+Every matched message and interval appears in paired-messages.csv; paired-comparisons.json preserves per-run counts and statistics.
+
+## Bulk-traffic cost
+
+| Scenario | Mode | Bulk completed / generated | Bulk mean ms | Bulk observed maximum ms |
+|---|---|---:|---:|---:|
+| burst | credit/fifo | 15/15 | 25.85 | 43.06 |
+| burst | credit/priority | 15/15 | 27.34 | 45.21 |
+| burst | push/fifo | 15/15 | 26.03 | 43.26 |
+| burst | push/priority | 15/15 | 26.46 | 43.86 |
+| outage | credit/fifo | 10/10 | 8.84 | 9.21 |
+| outage | credit/priority | 10/10 | 8.89 | 9.97 |
+| outage | push/fifo | 10/10 | 8.78 | 9.31 |
+| outage | push/priority | 10/10 | 8.70 | 8.99 |
+| slow | credit/fifo | 10/10 | 9.13 | 9.48 |
+| slow | credit/priority | 10/10 | 8.80 | 9.25 |
+| slow | push/fifo | 10/10 | 8.75 | 9.05 |
+| slow | push/priority | 10/10 | 8.88 | 9.34 |
+| steady | credit/fifo | 10/10 | 8.78 | 9.13 |
+| steady | credit/priority | 10/10 | 8.94 | 9.33 |
+| steady | push/fifo | 10/10 | 10.14 | 16.40 |
+| steady | push/priority | 10/10 | 8.77 | 9.16 |
+
+## Per-run outcomes and observed maxima
+
+| Scenario | Seed | Mode | Repeat | Critical n | Critical mean ms | Critical max ms | Drops | Unknown |
+|---|---:|---|---:|---:|---:|---:|---:|---:|
+| burst | 7 | credit/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| burst | 7 | credit/priority | 1 | 0/0 | — | — | 0 | 0 |
+| burst | 7 | push/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| burst | 7 | push/priority | 1 | 0/0 | — | — | 0 | 0 |
+| outage | 7 | credit/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| outage | 7 | credit/priority | 1 | 0/0 | — | — | 0 | 0 |
+| outage | 7 | push/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| outage | 7 | push/priority | 1 | 0/0 | — | — | 0 | 0 |
+| slow | 7 | credit/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| slow | 7 | credit/priority | 1 | 0/0 | — | — | 0 | 0 |
+| slow | 7 | push/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| slow | 7 | push/priority | 1 | 0/0 | — | — | 0 | 0 |
+| steady | 7 | credit/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| steady | 7 | credit/priority | 1 | 0/0 | — | — | 0 | 0 |
+| steady | 7 | push/fifo | 1 | 0/0 | — | — | 0 | 0 |
+| steady | 7 | push/priority | 1 | 0/0 | — | — | 0 | 0 |
+
+## Interpretation and limits
+
+A large post-send improvement may yield a smaller end-to-end improvement when producer-local head-of-line blocking dominates. Show means, observed maxima, completion counts and bulk cost together.
+
+Empirical p99/p99.9 remain in JSON. p99_equals_max marks runs where nearest-rank p99 selects the observed maximum; the tables call that observation max. Short samples cannot establish stable tails.
+
+Sink processing is serialized and non-preemptive. Slowdown and pause settings apply at batch entry; pauses do not model network partitions or durable-backend crashes. OS wake-up delays can extend requested sleeps. Compare datasets only after checking sink-timing behavior, load-window duration and backend settings against the recorded source and executable provenance; CSV format alone does not establish comparability.
+
+Payload reservations do not cap process RSS or kernel socket buffering. Producer queues hold metadata; payloads are synthesized at send time. failed_unknown may include processing without an observed ACK; it is not known loss or exactly-once delivery.
+ Container prento-readme-check-benchmark-run-39513a825e39 Creating 
+ Container prento-readme-check-benchmark-run-39513a825e39 Created 

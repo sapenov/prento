@@ -1,141 +1,87 @@
 # Prento
 
-**Pronunciation:** PREN-to. **Intended association:** prompt delivery and operational readiness.
+**Timely telemetry under load.**
 
-A reproducible laptop experiment comparing **bounded TCP push/backpressure** and **receiver-issued credits**, independently of FIFO versus priority scheduling.
+C++20 · Linux / TCP · Docker / OCI · Automated tests and CI
 
-This project investigates a question: *does coordinated admission across producers help beyond priority-aware backpressure when a telemetry sink slows down?* It is an application-layer experiment inspired by Homa's receiver control. It is not an implementation of Homa and does not establish a novel transport algorithm.
+[![CI](https://github.com/sapenov/prento/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sapenov/prento/actions/workflows/ci.yml)
 
-**Observed result:** across 144 Docker benchmark trials, priority-aware push reduced mean critical end-to-end latency about **10% under bursts** and **13% with a slow sink**, versus push/FIFO. With priority-aware push, **98.7% of critical latency under bursts and 98.1% with a slow sink occurs before sending**. Credits added no consistent benefit beyond priority-aware push. All **79,236 generated messages completed** after drain, with no drops or unknown outcomes.
+When a telemetry backend slows down, time-sensitive events can wait behind routine bulk data. Prento is a C++20 performance testbed for evaluating how scheduling and admission control affect that delay.
 
-The benchmark covers four scenarios, four modes, three workload seeds and three timing repeats, with five-second load windows in a container limited to four CPUs and 1 GiB RAM. Individual critical samples are small; these results do not establish a tail SLO or production capacity. Read the [findings and trade-offs](results/2026-11-04-qa/INTERPRETATION.md) or the [complete measured report](results/2026-11-04-qa/REPORT.md).
+Across **144 Docker benchmark trials** and three workload seeds, priority-aware push reduced mean critical end-to-end latency by **10.4% during bursts** and **13.3% with a slow sink**, compared with FIFO push. All **79,236 synthetic messages completed after drain**, with no drops or unknown outcomes.
 
-## Testing and evidence
+[View results](#results) · [Run the experiment](#quickstart) · [Explore the architecture](#architecture)
 
-Start with the [QA guide](qa/README.md) for checks, benchmark reproduction and a file map. The [verification summary](qa/VERIFICATION.md) lists recorded results and their evidence. Build a source-and-evidence ZIP with `make qa-bundle`; compiled binaries and Git metadata are excluded. The [measured source snapshot](qa/measurement-source/README.md) and archived results preserve the exact names and provenance used for the published benchmark.
+## Results
 
-## Run the three-service demo
+![Mean critical end-to-end latency: burst 825.51 to 739.65 ms, a 10.4% reduction; slow sink 833.05 to 722.15 ms, a 13.3% reduction. Push/FIFO versus push/priority.](docs/images/results.svg)
 
-Requirements: Docker Desktop with Linux containers (WSL2 on Windows), or Docker Engine and Compose on Linux. The build image contains the compiler and CMake.
+The chart highlights two stressed workloads. Each value averages nine runs equally: three seeds × three timing repeats. Seed ranges describe variation, not confidence intervals. [All four scenarios, bulk costs and observed maxima](results/2026-11-04-qa/INTERPRETATION.md) accompany the [complete report](results/2026-11-04-qa/REPORT.md).
+
+**Measurement scope:** five-second offered-load windows plus drain; four CPUs and 1 GiB per container on a shared laptop. Each trial contains only 22–45 critical messages, so the results describe means and observed maxima rather than a production tail SLO. Completion acknowledges simulated sink processing.
+
+## Engineering findings
+
+- **Priority helped in the tested burst and slow-sink workloads.** Mean latency fell while some individual messages took longer; burst bulk mean latency increased 0.95%. The comparison keeps admission, workload and resource limits fixed.
+- **Receiver credits offered no consistent additional benefit beyond priority-aware push.** The experiment makes their coordination cost and workload dependence visible, supporting the simpler policy for this workload.
+- **The next bottleneck is upstream of transmission.** With priority-aware push, pre-send time accounts for 98.7% of critical mean latency in bursts and 98.1% with a slow sink. It includes producer FIFO waiting, scheduling lateness and preparation; finer instrumentation is needed to isolate each cause.
+
+These findings guide the next experiment: measure producer stages and test source-local priority under the same queue and resource budgets. [Options and effort estimates](docs/PRODUCER_LATENCY.md).
+
+## Quickstart
+
+Requirements: Docker Engine/Desktop with Linux containers and Docker Compose. The image supplies the compiler and Python; the first build needs package-repository access unless cached.
 
 ```sh
-docker compose build
-docker compose up -d sink collector
-docker compose run --rm producer
-docker compose logs collector
+docker compose --profile bench run --build --rm benchmark --output /results/run --seeds 7,42,2026 --repeats 3 --duration-ms 5000
 ```
 
-Retrieve the raw outcomes from the named results volume with:
+This matches the published workload configuration: four scenarios × four modes × three seeds × three repeats. It took about 15 minutes on the measured laptop, plus image-build time. It uses the live Prento executable; the recorded results retain their [measured source and image identity](qa/measurement-source/README.md). Timings vary across machines and runs.
+
+The runner prints per-trial generated/completed/drop/unknown counts and writes a report, latency chart, matched-message comparisons and raw outcomes to the `bench-results` volume. Read the report with:
 
 ```sh
-docker compose run --rm --entrypoint cat producer /results/outcomes.csv
-docker compose down
-```
-
-Collector metrics and health: [http://localhost:19090/metrics](http://localhost:19090/metrics), `/readyz`, `/livez`. Health means the process can accept connections; it does not establish sink durability or upstream health. Service containers run as non-root with dropped capabilities, read-only root filesystems and fixed resource limits. Only the metrics port is published, on loopback.
-
-Choose the mode before starting the stack:
-
-```sh
-ADMISSION=push POLICY=fifo docker compose up -d --force-recreate sink collector
-ADMISSION=push POLICY=fifo docker compose run --rm producer
-```
-
-Keep producer and collector admission settings identical. On PowerShell use `$env:ADMISSION="push"; $env:POLICY="fifo"` before the Compose commands. Start fresh services for a fresh slowdown schedule.
-
-## One-command experiment
-
-Run all four policies over steady, burst, slow-sink and outage-like-pause scenarios inside one fixed-budget benchmark container:
-
-```sh
-docker compose --profile bench run --build --rm benchmark
-```
-
-The benchmark runner launches separate producer, collector and sink processes over real loopback TCP within that container. It uses the same program as the demo, but is not a multi-container network-capacity test. Results are retained in the `bench-results` named volume. A nonempty output directory is protected from overwriting. For another run choose a new output name:
-
-```sh
-docker compose --profile bench run --rm benchmark --output /results/run-2
 docker compose --profile bench run --rm --entrypoint cat benchmark /results/run/REPORT.md
 ```
 
-Each run includes `outcomes.csv`, command/config JSON, process logs, sampled producer/collector/sink RSS and CPU time, and final collector metrics. CPU sampling can miss work after the last sample, especially very short runs. The suite produces `REPORT.md`, `FINDINGS.md`, per-run and aggregate JSON, matched-message comparisons and `latency-breakdown.svg`.
+For another run, replace `/results/run` with a fresh path such as `/results/run-2` in both commands. Nonempty output directories are protected. See [native builds, the three-service demo and result retrieval](docs/RUNNING.md).
 
-## Native Linux / WSL
+## Architecture
 
-The executable is `prento` (`build/prento` after a Make build). Only GCC supporting C++20, Make and Python 3 are needed. There are no downloaded C++ libraries or Python packages.
-
-```sh
-make test
-make sanitize
-make bench
+```mermaid
+flowchart LR
+    P["Scheduled producers<br/>bounded local queues"] --> C["TCP collector<br/>admission + ready-work scheduling"]
+    C --> S["Serialized sink<br/>slowdown / pause controls"]
 ```
 
-Alternatively, `cmake -S . -B build-cmake && cmake --build build-cmake && ctest --test-dir build-cmake` builds the binary and core tests. Full process tests use `PRENTO_BINARY=/absolute/path/to/prento python3 -m unittest discover -s tests -p 'test_*.py' -v`.
-
-Change the workload explicitly:
-
-```sh
-python3 scripts/bench.py --output results/my-run --seeds 7,42,2026 --repeats 3 --duration-ms 10000 --critical-fraction 0.2 --producers 32
-python3 scripts/report.py results/my-run
-```
-
-Native runs do **not** apply CPU or memory isolation. Record competing load; use a container budget or dedicated hosts for stronger comparisons. `/proc` sampling is Linux-specific and sampled RSS can miss brief peaks.
-
-## Architecture and comparison
-
-```text
-fixed-schedule generator -> bounded producer queues -> TCP collector -> serialized slow sink
-                                                     admission + ready-work scheduling
-```
-
-| Mode | Admission | Scheduling |
+| | FIFO among fitting batches | Critical preference with bulk opportunities |
 |---|---|---|
-| push/fifo | Read payload only when reservation space is available | FIFO among fitting requests |
-| push/priority | Same bounded read policy | Critical preference with periodic bulk opportunities |
-| credit/fifo | Announce metadata, wait for explicit full-batch grant | FIFO among fitting requests |
-| credit/priority | Same explicit grants | Critical preference with periodic bulk opportunities |
+| Bounded push / TCP backpressure | `push/fifo` | `push/priority` |
+| Explicit receiver-issued credits | `credit/fifo` | `credit/priority` |
 
-Compare push/FIFO with push/priority for priority's effect; push/FIFO with credit/FIFO for credits; and push/priority with credit/priority for credits beyond a priority-aware baseline. All modes use identical payloads, checksums, sink processing and source scheduling.
+The four modes isolate the effect of scheduling from the effect of explicit credits. Every mode uses full-batch collector reservations bounded by **256 KiB** in the recorded benchmark, identical payloads and checksums, and the same processing acknowledgments. This reservation budget does not cap process RSS or kernel buffers.
 
-The collector reserves the full payload size before reading it and releases its reservation after sink completion/failure. In push mode payloads may already occupy producer and kernel socket buffers. In credit mode producers wait for the explicit permission. Both inherit TCP flow control. Up to `max-clients` concurrent sessions are accepted; completed thread handles are reaped.
+Application-layer receiver control draws inspiration from Homa; the implementation runs over TCP. Producers expose one outstanding batch per connection, and batches are non-preemptive. [Methodology, wire protocol and measurement definitions](docs/METHODOLOGY.md).
 
-Each producer has one outstanding batch per connection. Only that next batch is announced; later critical work can wait behind earlier producer-local work. No packet SRPT, true preemption or unscheduled fast path is implemented. The quota offers bulk a turn among fitting work, rather than guaranteeing bounded bulk delay when its entire batch cannot fit.
+## Validation and scope
 
-## Workload and measurements
+Real TCP integration tests cover accounting, admission order, ready-work scheduling and failure behavior. The recorded suite passes **18 core checks and 26 Python tests**, ASan/UBSan, TSan and three mutation checks. [Verification evidence](qa/VERIFICATION.md).
 
-Defaults: 16 producer connections, 100 generated batches/s globally, 5% critical messages by count, 256-byte critical messages and 32-KiB bulk batches. These synthetic settings do not represent a particular production workload. Traffic class and size can be configured independently. A fixed seed preserves message classes and assignment; OS scheduling and timings vary. Suite order is shuffled deterministically to reduce systematic order bias.
+Traffic classes are synthetic labels. The custom protocol acknowledges processing rather than durable storage. The [Kubernetes manifest](deploy/kubernetes.yaml) is an illustrative deployment configuration; production adapters and multi-node scaling remain validation work.
 
-- **Latency:** intended generation time through sink processing ACK, including producer waiting. Timestamp decomposition separates pre-send from post-send time; neither isolates collector queueing. Report means, observed maxima and counts. Empirical p50/p99/p99.9 remain inspectable in JSON.
-- **Outcomes:** exactly one CSV row per generated logical ID: `completed`, `producer_drop`, or `failed_unknown`. A failed/unknown delivery may have reached the sink, so never call it known loss or retry it as exactly-once.
-- **Throughput:** offered bytes and bytes completed during the offered-load window; report drain time separately. Final admitted batch/byte counters are exposed for external rate sampling.
-- **Memory:** collector reserved bytes and sampled RSS for all three processes. Reservation cap is not a process-RSS or total-system-memory cap. Generator queues contain metadata; payloads are synthesized at send time. Report logical queued bytes separately.
-- **Sink:** one shared service mutex serializes all sessions. Slowdown multipliers and outage-like pauses are evaluated at batch service entry. Work already processing is not interrupted, and a chosen multiplier applies for the whole batch. These scenarios are not actual packet loss, network partitions or durable-backend crashes.
+## Next experiments
 
-Short default runs produce few critical samples. Their p99 is exploratory and near the observed maximum; longer runs, multiple workload seeds and independent-host experiments are necessary before claiming tail improvement or capacity. Never extrapolate laptop loopback results to a physical fabric. Read [DESIGN.md](DESIGN.md) and the measured report together.
+1. Instrument producer stages and evaluate producer-local priority.
+2. Add a standard telemetry adapter and an OpenTelemetry Collector baseline.
+3. Extend workload duration and test on independent hosts with a durable backend.
 
-## Wire protocol and completion semantics
+## Documentation
 
-A 32-byte network-order header carries magic/version, type, class, admission mode, ID, payload length, FNV-1a checksum and intended timestamp. Types are ANNOUNCE, GRANT, ACK and REJECT. The sender announces, optionally waits for a grant, sends exactly the declared payload and waits for the final processing acknowledgment. Full-batch grants add one 32-byte application message; report actual latency instead of assuming a fixed percentage penalty.
+- [Run and deploy](docs/RUNNING.md): Compose, native builds, metrics and Kubernetes examples.
+- [Methodology and protocol](docs/METHODOLOGY.md): fair comparisons, measurements and completion semantics.
+- [QA guide](qa/README.md): tests, evidence map and reproduction. `make qa-bundle` packages source, documentation and preserved benchmark evidence with checksums.
+- [Engineering notes](docs/ENGINEERING.md) · [Architecture decisions](DESIGN.md) · [MIT license](LICENSE).
 
-This is a custom lab protocol, **not OTLP or gNMI**. Fixed-size headers, bounded batch lengths, checksums and socket deadlines reject malformed data. FNV-1a is a corruption check, not authentication. Ports are unauthenticated; local runs bind loopback. Distributed deployment needs transport authentication, policy enforcement and a supported adapter. ACK means completion of simulated sink processing, not fsync, Kafka replication or exactly-once delivery.
+Created by [Khazretgali Sapenov](https://github.com/sapenov).
 
-The source does not retry failed batches. Receiver credits and state are local to one collector. Kubernetes connections stay pinned to their selected collector; adding pods does not redistribute existing TCP streams.
-
-## Kubernetes example
-
-`deploy/kubernetes.yaml` supplies two collectors, one bottleneck sink, Services and producer Jobs. Replace image tags with your registry digest (or explicitly load the image into a local cluster), then apply it in an isolated namespace. Job results are on ephemeral pod storage; copy them before deleting pods. This example has no HPA, custom metrics adapter or durability and is **not evidence of multi-node scaling**. Adding collectors cannot scale past the shared sink's capacity.
-
-## Future work
-
-Streaming/chunk grants and SRPT, producer-local priority, authenticated adapters for OTLP/gNMI, OTel Collector interoperability baseline, durable acknowledgment/replay, and tests on independent physical hosts. Each is a separate experiment; none is claimed complete here.
-
-Source: [sapenov/prento](https://github.com/sapenov/prento).
-
-See the [engineering notes](docs/ENGINEERING.md), [producer-latency options and effort estimates](docs/PRODUCER_LATENCY.md), [test coverage and limitations](qa/REVIEW.md) and [MIT license](LICENSE).
-
-## References
-
-- [Homa protocol synopsis](https://github.com/PlatformLab/HomaModule/blob/main/protocol.md): receiver grants, scheduling and where the inspiration comes from.
-- [gRPC flow control](https://grpc.io/docs/guides/flow-control/): existing receiver/transport controls that motivate a strong baseline.
-- [OpenTelemetry Collector benchmarks](https://opentelemetry.io/docs/collector/benchmarks/): future interoperability comparison; not implemented in this custom-protocol lab.
-- [wrk2 measurement discussion](https://github.com/giltene/wrk2): intended-send-time latency and coordinated omission. This lab does not depend on wrk2.
+**Pronunciation:** PREN-to. **Intended association:** prompt delivery and operational readiness.

@@ -76,7 +76,7 @@ python3 scripts/report.py qa-local/reproduced-results
 
 This runs four scenarios × four modes × three seeds × three repeats: 144 trials, each with five seconds of offered load plus drain. Order seed 42 shuffles the suite. On the measured laptop it took about 15 minutes. Use fresh container, volume and output names for another run; nonempty result directories are protected. Timings vary across hosts and runs.
 
-For a three-container demo, follow the [README](../README.md#run-the-three-service-demo). Kubernetes configuration is illustrative and has not been deployed or benchmarked.
+For a three-container demo, follow the [running guide](../docs/RUNNING.md#three-service-demo). Kubernetes configuration is illustrative and has not been deployed or benchmarked.
 
 ## Acceptance and failure reporting
 

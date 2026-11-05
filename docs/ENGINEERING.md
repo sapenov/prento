@@ -15,6 +15,7 @@ Prento uses dependency-free C++20 and POSIX TCP sockets to compare receiver cred
 | Measurement validation | Paired comparisons require matching logical workloads, sink/load/buffer/queue/timeout settings and recorded executable identities. Timestamp intervals include all pre-send and post-send work. |
 | Scheduling | Controlled TCP tests independently verify admission priority and service order among ready payloads. Separate mutations verify sensitivity to both selectors and premature grants. |
 | Failure diagnostics | NetworkTest failures retain commands, logs, outcomes, producer output and timeout information. A filesystem fixture verifies retention; CI uploads the artifacts. |
+| Results visualization | The README figure is generated from the preserved summaries, checked against equally weighted run means, and inspected at normal/narrow sizes and in grayscale. Benchmark evidence is read-only. |
 | Packaging | Metadata distinguishes source payloads, checked payloads and archive entries. Reserved names are rejected. Strict checksum verification detects extra files in a fresh extraction. |
 
 Git attributes preserve source and experiment bytes across checkout platforms. Whitespace checks exclude recorded formatting in raw results and console logs. Public logs normalize local workspace prefixes without changing outcomes or timing values.

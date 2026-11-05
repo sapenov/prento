@@ -8,6 +8,7 @@ Evidence paths below are relative to `qa/logs/validation/`.
 
 | Check | Recorded result | Evidence |
 |---|---|---|
+| README and results figure | Source-value, local-link/anchor and integrity checks passed; normal/narrow/grayscale inspection; native suite and short Compose comparison passed | `../readme-validation.log` |
 | Native warnings-as-errors build | 18 core checks and 26 Python tests passed | `native.log` |
 | ASan/UBSan | 18 core checks and 26 Python tests passed | `asan-ubsan.log` |
 | TSan | 18 core checks and 26 Python tests passed with per-process `setarch -R` | `tsan.log` |
