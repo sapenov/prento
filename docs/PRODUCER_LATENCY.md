@@ -1,6 +1,6 @@
 # Effort to reduce producer-side latency
 
-This is an engineering estimate, not an implemented optimization or predicted benchmark result. Effort means focused hours for an experienced C++ engineer, including verification; coding-agent elapsed time can differ. The existing 144-trial measurements remain unchanged.
+This is an engineering estimate, not an implemented optimization or predicted benchmark result. Effort means focused hours for an experienced C++ engineer, including verification. The existing 144-trial measurements remain unchanged.
 
 ## What the current measurements establish
 

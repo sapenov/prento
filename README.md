@@ -129,7 +129,7 @@ Streaming/chunk grants and SRPT, producer-local priority, authenticated adapters
 
 Source: [sapenov/prento](https://github.com/sapenov/prento).
 
-Agent workflow, failures and checks: [docs/AGENT_WORKFLOW.md](docs/AGENT_WORKFLOW.md). See the [producer-latency effort estimate](docs/PRODUCER_LATENCY.md), [QA review decisions](qa/CLAUDE_REVIEW.md) and [MIT license](LICENSE).
+Engineering record and validation: [docs/ENGINEERING.md](docs/ENGINEERING.md). See the [producer-latency effort estimate](docs/PRODUCER_LATENCY.md), [QA review decisions](qa/REVIEW.md) and [MIT license](LICENSE).
 
 ## References
 

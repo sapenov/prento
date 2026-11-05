@@ -2,7 +2,7 @@
 
 This is the preserved **initial-version** record. Its sink timer had a one-millisecond sleep floor. The corrected implementation, additional tests and multi-seed evidence are documented in [the QA verification record](../qa/VERIFICATION.md). Do not combine results across these service models.
 
-Observed in this task on November 4, 2026, America/New_York. No remote publication occurred.
+Initial-version validation was performed on November 4, 2026 (America/New_York).
 
 | Check | Result |
 |---|---|

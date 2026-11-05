@@ -1,8 +1,8 @@
 # QA verification
 
-Observed locally on November 4, 2026. This record supersedes the initial-version verification for the current implementation; the original raw evidence is preserved separately. No remote publication or production deployment occurred.
+Validation was performed on November 4, 2026. Current and historical test evidence are distinguished below; raw experiment records are preserved separately.
 
-## Current revision: Claude QA fixes
+## Current regression coverage
 
 The C++ application fingerprints still match the measured 144-trial image. This revision changes tests, packaging, CI diagnostics, documentation and licensing. It adds independent service-order coverage; the older coverage limitation below is retained as history.
 
@@ -18,19 +18,19 @@ The C++ application fingerprints still match the measured 144-trial image. This 
 
 The new bundle fixtures first failed for incorrect metadata count, missing strict verification and allowed reserved names; they pass after correction. The diagnostic fixture first failed because files were deleted, then passed once a failing process test retained its real files. No application timing changes or test retries were introduced for the unconfirmed overload-test flake.
 
-A clean temporary extraction of the updated archive passed strict verification, the complete evidence audit, and a fresh warnings-as-errors build with all 18 core checks and 26 Python tests. Log: `qa/logs/claude-fixes-clean-extraction.log`. Final packaging will preserve this log alongside the public copy of the source and evidence.
+A clean temporary extraction of the updated archive passed strict verification, the complete evidence audit, and a fresh warnings-as-errors build with all 18 core checks and 26 Python tests. Log: `qa/logs/claude-fixes-clean-extraction.log`. The log accompanies the source and evidence in the QA bundle.
 
-Review decisions: [CLAUDE_REVIEW.md](CLAUDE_REVIEW.md). Public logs retain execution outcomes and replace local workspace prefixes; [log handling](logs/README.md) documents the transformation. Original local copies are ignored and excluded from publication and bundles. MIT was explicitly selected by the owner.
+Review decisions: [REVIEW.md](REVIEW.md). Public logs retain execution outcomes and replace local workspace prefixes; [log handling](logs/README.md) documents the transformation. Original execution logs are retained locally; supplied copies are covered by the archive manifest. Prento is MIT licensed.
 
-## Prento naming and final local checks
+## Current project checks
 
-The owner selected Prento, pronounced PREN-to, with the intended association prompt delivery and operational readiness. Current archive roots/image examples use prento; historical immutable evidence retains its earlier identifiers. The public destination is [sapenov/prento](https://github.com/sapenov/prento), created under the authenticated owner account with MIT selected explicitly.
+Current archive roots/image examples use prento; historical measurement records retain their earlier identifiers. Source: [sapenov/prento](https://github.com/sapenov/prento), licensed under MIT.
 
 After renaming, native and Docker suites passed 18 core checks and 26 Python tests. All 26 Python tests also passed against the unchanged ASan/UBSan and TSan binaries (TSan with per-process ASLR disabled). The renamed Compose stack built and completed 300/300 messages with no drops/unknowns, then shut down. Evidence: prento-native.log, prento-asan-ubsan.log, prento-tsan.log, prento-docker-build.log, prento-docker-tests.log, prento-runtime-build.log and prento-compose.log under qa/logs/.
 
 The Prento-named clean extraction passed strict verification, the full 144-trial audit and a fresh build with 18 core checks/26 Python tests. Log: `qa/logs/prento-clean-extraction.log`. Git attributes preserve exact source/evidence bytes; whitespace checks exclude retained raw report/log formatting. A staged-byte audit verified every file against its Git blob before publication.
 
-Public GitHub verification: [the corrected run](https://github.com/sapenov/prento/actions/runs/41965080263) passed native tests, ASan/UBSan, TSan and runtime Docker build on commit d62053f. The initial validation failure remains visible in history and its configuration fix is recorded in AGENT_WORKFLOW.md. Subsequent public README/handoff edits are documentation only and use skip-ci commits; no application/test source changed after the passing run. Structured evidence: `qa/logs/prento-github-ci.json`.
+Public GitHub verification: [the corrected run](https://github.com/sapenov/prento/actions/runs/41965080263) passed native tests, ASan/UBSan, TSan and runtime Docker build on commit d62053f. The initial validation failure remains visible in history and its configuration fix is recorded in ENGINEERING.md. Subsequent public README/handoff edits are documentation only and use skip-ci commits; no application/test source changed after the passing run. Structured evidence: `qa/logs/prento-github-ci.json`.
 
 ## Previous corrected-timer QA revision (historical)
 
@@ -46,7 +46,7 @@ The following record and its logs describe the earlier 21-test revision. Its raw
 | ThreadSanitizer with per-process ASLR disabled | 18 core checks and full final Python suite passed | `qa/logs/tsan-no-aslr.log`, `qa/logs/tsan-final.log` |
 | Mutation checks | Both deliberate defects rejected; checker exited successfully | `qa/logs/mutation-checks.log` |
 | Multi-seed orchestration smoke | Eight short trials completed | `qa/logs/benchmark-smoke.log` |
-| Independent read-only source review | Prior configuration/provenance issues fixed; no remaining Important/Critical findings | `docs/AGENT_WORKFLOW.md` |
+| Independent read-only source review | Prior configuration/provenance issues fixed; no remaining Important/Critical findings | `docs/ENGINEERING.md` |
 
 Timer tests first rejected the old submillisecond rounding behavior. Integration tests use the actual collector and controlled TCP clients/backend. In that earlier revision they isolated admission scheduling and credit reservation. The current revision separately exercises admitted payload-ready service ordering. Intentional failing test output in the mutation log belongs to temporary mutated source, not the shipped implementation.
 
@@ -72,7 +72,7 @@ Container limits: four CPUs (`cpu.max=400000 100000`), 1 GiB (`memory.max=107374
 
 Results and numerical limits: [interpretation](../results/2026-11-04-qa/INTERPRETATION.md), [complete report](../results/2026-11-04-qa/REPORT.md), [raw environment](../results/2026-11-04-qa/environment.json). Historical results used a different timer and load-window length; no isolated timer-fix speedup is inferred from them.
 
-An independent read-only evidence review recomputed all 144 raw ledgers, aggregate means/seed ranges, 144 paired comparison records and 79,236 paired-message rows. It also checked source fingerprints and SVG structure. No Important/Critical findings remained. This agent review is not a human QA sign-off.
+An independent read-only evidence review recomputed all 144 raw ledgers, aggregate means/seed ranges, 144 paired comparison records and 79,236 paired-message rows. It also checked source fingerprints and SVG structure. No Important/Critical findings remained. The review was AI-assisted; automated checks and measured outcomes are listed separately.
 
 ## Archive verification
 

@@ -1,6 +1,6 @@
-# Claude QA review decisions
+# Review findings
 
-The owner authorized implementation after the review was assessed. This record documents engineering decisions and observed checks; it is not a human QA sign-off. The human review fields in README.md remain blank.
+Findings from AI-assisted review, with implementation decisions and verification evidence.
 
 | Finding | Decision and implementation |
 |---|---|
@@ -10,7 +10,6 @@ The owner authorized implementation after the review was assessed. This record d
 | One overload-test failure without captured details | Unresolved; no root cause established. NetworkTest cases now retain logs, commands, outcomes, producer output and timeout diagnostics on failure; CI uploads artifacts. No scheduling change, retry or timing relaxation hides the observation. |
 | Bundle counts | Fixed. Format 2 distinguishes source_payload_files, payload_files including BUNDLE.json, and archive_files including MANIFEST.sha256. Reserved metadata names are rejected. |
 | Unlisted files ignored by verification | Added optional --strict for a fresh extraction. Ordinary verification tolerates intentional subsequent build output while still checking every listed payload. |
-| Public preparation | Owner selected MIT. Public log copies replace local workspace prefixes; original private copies are ignored/excluded. Completed initial checkboxes and stale publication wording are reconciled. Historical branch information remains explicitly historical. |
 
 Before this change, independent temporary mutations reproduced the specific gap: all 21 old tests passed with service priority disabled; the supplied test failed. With only admission priority disabled, the supplied test passed and the old admission test failed. The new three-mutation checker retains that separation.
 

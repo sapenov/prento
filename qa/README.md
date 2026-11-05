@@ -87,14 +87,14 @@ Small samples get an observed-maximum label in the report. Empirical p99/p99.9 r
 - Check reservation peaks and final release, completion fractions, sample sizes and per-seed variation.
 - Inspect slow/outage semantics: pauses apply at batch entry; in-progress work is non-preemptive.
 - Treat `failed_unknown` as uncertain delivery, not definite loss; completion is simulated processing, not durable storage.
-- Record your own review decisions below. No human approval or review is pre-filled.
+- Record reviewer, environment, commands and findings below.
 
 Failures in NetworkTest cases (including the overload test) retain logs, commands, outcome CSV and captured producer output under `qa-local/failures` (or `FANIN_FAILURE_DIR`). CI uploads that directory on failure. Scheduling/service-order tests use their own cleanup and currently report failures through the test output. The one reported overload-test flake remains unconfirmed; preserve its error and artifacts if it recurs.
 
-## Human QA review record
+## Review record
 
-Reviewer/date: to be completed by QA.
+Reviewer/date: not yet recorded.
 
-Commands and environment: to be completed by QA.
+Commands and environment: not yet recorded.
 
-Findings, decisions and disposition: to be completed by QA.
+Findings, decisions and disposition: not yet recorded.

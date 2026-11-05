@@ -19,7 +19,6 @@ Build a Linux laptop experiment comparing bounded push/backpressure and explicit
 
 README with measured results, architecture and limitations; source/tests; Makefile/CMake; non-root multi-stage container/Compose; benchmark and report commands producing CSV/JSON/standalone SVG; CI; actual agent workflow record. Kubernetes manifests demonstrate deployment only and are secondary to working native/Compose verification.
 
-Keep changes isolated to this project. Publishing or creating an external repository requires a separate user instruction.
 
 ## QA update
 

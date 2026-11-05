@@ -23,9 +23,7 @@ Numbers above are the median of three per-run p99 values, not a pooled p99. Shor
 
 The implementation intentionally uses whole batches and one in-flight batch per producer connection. Critical work can wait behind earlier producer-local bulk work before its metadata is announced. Processing is non-preemptive. Credits coordinate only the next announced batch, and both push and credit already enforce the same receiver byte budget. These constraints narrow the possible benefit.
 
-## What to say in an interview
-
-> I built a C++ telemetry fan-in experiment with four controlled baselines. Priority improved selected overload cases modestly, but explicit credits did not consistently beat priority-aware push. The result favored keeping the simpler mechanism for this workload. I documented source-side head-of-line blocking, finite buffering, ambiguous acknowledgments and the limits of laptop tail measurements.
+## Next experiment
 
 A subsequent experiment could isolate producer-local priority or chunk-level preemption. Those are not implemented or measured here.
 

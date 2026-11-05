@@ -32,4 +32,4 @@ All processes communicate over loopback inside one container capped at four CPUs
 
 The preserved initial-version runs used a one-millisecond sleep floor and shorter load windows. They are historical evidence, not a controlled before/after timer-speed benchmark. No percentage improvement from fixing the timer is claimed.
 
-A sensible next experiment would isolate producer-local priority or chunked admission, one variable at a time. Neither is implemented here. For the interview, the defensible result is the comparison and diagnosis: collector priority helps, upstream blocking limits the user-visible benefit, and the extra credit mechanism needs a stronger use case.
+A sensible next experiment would isolate producer-local priority or chunked admission, one variable at a time. Neither is implemented here. The comparison identifies a useful priority effect, upstream blocking that limits end-to-end gains, and a need for further evidence to justify explicit credits.
