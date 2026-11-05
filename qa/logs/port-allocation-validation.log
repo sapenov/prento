@@ -1,0 +1,369 @@
+Test endpoint allocation validation
+
+CI artifacts showed sink and metrics sharing port 34605 while ingest used 33349. Distinct candidates are required for each test stack. Application sources and original benchmark evidence are unchanged.
+
+
+Expected regression failure against repeated candidate assignment
+test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct) ... FAIL
+Failure diagnostics: <PROJECT_ROOT>/qa-local/failures/test_reused_port_candidate_keeps_service_endpoints_distinct-pdjtmjcx
+
+======================================================================
+FAIL: test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_network.py", line 135, in test_reused_port_candidate_keeps_service_endpoints_distinct
+    _, _, target, metrics = self.stack()
+                            ^^^^^^^^^^^^
+  File "<PROJECT_ROOT>/tests/test_network.py", line 85, in stack
+    wait_port(metrics_port, collector)
+  File "<PROJECT_ROOT>/tests/test_network.py", line 30, in wait_port
+    raise AssertionError(f"service exited: {process.returncode}")
+AssertionError: service exited: 1
+
+----------------------------------------------------------------------
+Ran 1 test in 0.084s
+
+FAILED (failures=1)
+
+
+Regression with distinct endpoint selection
+test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.190s
+
+OK
+
+
+Native suite
+./build/core-test
+core: 18 checks passed
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_schedule_covers_each_combination_and_repeats_order (test_bench.BenchTest.test_schedule_covers_each_combination_and_repeats_order) ... ok
+test_seed_parser_rejects_ambiguous_and_invalid_inputs (test_bench.BenchTest.test_seed_parser_rejects_ambiguous_and_invalid_inputs) ... ok
+test_archive_manifest_detects_changed_files (test_bundle.BundleTest.test_archive_manifest_detects_changed_files) ... ok
+test_bundle_rejects_escape_and_symlinks (test_bundle.BundleTest.test_bundle_rejects_escape_and_symlinks) ... ok
+test_bundle_rejects_reserved_metadata_names (test_bundle.BundleTest.test_bundle_rejects_reserved_metadata_names) ... ok
+test_strict_verification_rejects_unlisted_files (test_bundle.BundleTest.test_strict_verification_rejects_unlisted_files) ... ok
+test_failed_test_retains_process_artifacts (test_diagnostics.DiagnosticsTest.test_failed_test_retains_process_artifacts) ... ok
+test_all_four_modes_complete_and_respect_budget (test_network.NetworkTest.test_all_four_modes_complete_and_respect_budget) ... ok
+test_corrupt_body_never_gets_success_ack (test_network.NetworkTest.test_corrupt_body_never_gets_success_ack) ... ok
+test_idle_sink_connection_can_be_reused (test_network.NetworkTest.test_idle_sink_connection_can_be_reused) ... ok
+test_invalid_options_fail (test_network.NetworkTest.test_invalid_options_fail) ... ok
+test_low_rate_producers_keep_idle_connections (test_network.NetworkTest.test_low_rate_producers_keep_idle_connections) ... ok
+test_overload_accounts_for_every_generated_item (test_network.NetworkTest.test_overload_accounts_for_every_generated_item) ... ok
+test_oversized_header_is_rejected_without_body (test_network.NetworkTest.test_oversized_header_is_rejected_without_body) ... ok
+test_producer_termination_interrupts_scheduled_wait (test_network.NetworkTest.test_producer_termination_interrupts_scheduled_wait) ... ok
+test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct) ... ok
+test_sink_loss_produces_explicit_unknown_outcomes (test_network.NetworkTest.test_sink_loss_produces_explicit_unknown_outcomes) ... ok
+test_stalled_body_releases_reservation (test_network.NetworkTest.test_stalled_body_releases_reservation) ... ok
+test_impossible_completed_timestamps_are_rejected (test_report.ReportTest.test_impossible_completed_timestamps_are_rejected) ... ok
+test_matching_modes_require_same_experiment_and_binary (test_report.ReportTest.test_matching_modes_require_same_experiment_and_binary) ... ok
+test_paired_comparison_validates_inputs_and_preserves_failures (test_report.ReportTest.test_paired_comparison_validates_inputs_and_preserves_failures) ... ok
+test_report_includes_losses_and_uses_nearest_rank (test_report.ReportTest.test_report_includes_losses_and_uses_nearest_rank) ... ok
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... ok
+test_fifo_preserves_order_in_both_admission_modes (test_scheduling.SchedulingTest.test_fifo_preserves_order_in_both_admission_modes) ... ok
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... ok
+test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) ... ok
+test_ready_fifo_preserves_order (test_service_priority.ServicePriorityTest.test_ready_fifo_preserves_order) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 10.728s
+
+OK
+
+
+ASan/UBSan suite
+mkdir -p build
+g++ -Iinclude -std=c++20 -O1 -g -Wall -Wextra -Wpedantic -Werror -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie -no-pie tests/core_test.cpp -o build/core-test-asan
+./build/core-test-asan
+core: 18 checks passed
+g++ -Iinclude -std=c++20 -O1 -g -Wall -Wextra -Wpedantic -Werror -pthread -fsanitize=address,undefined -fno-omit-frame-pointer -fno-pie -no-pie src/main.cpp src/collector.cpp src/producer.cpp src/sink.cpp -o build/prento-asan
+PRENTO_BINARY=<PROJECT_ROOT>/build/prento-asan python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_schedule_covers_each_combination_and_repeats_order (test_bench.BenchTest.test_schedule_covers_each_combination_and_repeats_order) ... ok
+test_seed_parser_rejects_ambiguous_and_invalid_inputs (test_bench.BenchTest.test_seed_parser_rejects_ambiguous_and_invalid_inputs) ... ok
+test_archive_manifest_detects_changed_files (test_bundle.BundleTest.test_archive_manifest_detects_changed_files) ... ok
+test_bundle_rejects_escape_and_symlinks (test_bundle.BundleTest.test_bundle_rejects_escape_and_symlinks) ... ok
+test_bundle_rejects_reserved_metadata_names (test_bundle.BundleTest.test_bundle_rejects_reserved_metadata_names) ... ok
+test_strict_verification_rejects_unlisted_files (test_bundle.BundleTest.test_strict_verification_rejects_unlisted_files) ... ok
+test_failed_test_retains_process_artifacts (test_diagnostics.DiagnosticsTest.test_failed_test_retains_process_artifacts) ... ok
+test_all_four_modes_complete_and_respect_budget (test_network.NetworkTest.test_all_four_modes_complete_and_respect_budget) ... ok
+test_corrupt_body_never_gets_success_ack (test_network.NetworkTest.test_corrupt_body_never_gets_success_ack) ... ok
+test_idle_sink_connection_can_be_reused (test_network.NetworkTest.test_idle_sink_connection_can_be_reused) ... ok
+test_invalid_options_fail (test_network.NetworkTest.test_invalid_options_fail) ... ok
+test_low_rate_producers_keep_idle_connections (test_network.NetworkTest.test_low_rate_producers_keep_idle_connections) ... ok
+test_overload_accounts_for_every_generated_item (test_network.NetworkTest.test_overload_accounts_for_every_generated_item) ... ok
+test_oversized_header_is_rejected_without_body (test_network.NetworkTest.test_oversized_header_is_rejected_without_body) ... ok
+test_producer_termination_interrupts_scheduled_wait (test_network.NetworkTest.test_producer_termination_interrupts_scheduled_wait) ... ok
+test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct) ... ok
+test_sink_loss_produces_explicit_unknown_outcomes (test_network.NetworkTest.test_sink_loss_produces_explicit_unknown_outcomes) ... ok
+test_stalled_body_releases_reservation (test_network.NetworkTest.test_stalled_body_releases_reservation) ... ok
+test_impossible_completed_timestamps_are_rejected (test_report.ReportTest.test_impossible_completed_timestamps_are_rejected) ... ok
+test_matching_modes_require_same_experiment_and_binary (test_report.ReportTest.test_matching_modes_require_same_experiment_and_binary) ... ok
+test_paired_comparison_validates_inputs_and_preserves_failures (test_report.ReportTest.test_paired_comparison_validates_inputs_and_preserves_failures) ... ok
+test_report_includes_losses_and_uses_nearest_rank (test_report.ReportTest.test_report_includes_losses_and_uses_nearest_rank) ... ok
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... ok
+test_fifo_preserves_order_in_both_admission_modes (test_scheduling.SchedulingTest.test_fifo_preserves_order_in_both_admission_modes) ... ok
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... ok
+test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) ... ok
+test_ready_fifo_preserves_order (test_service_priority.ServicePriorityTest.test_ready_fifo_preserves_order) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 11.161s
+
+OK
+
+
+TSan suite with per-process setarch -R
+mkdir -p build
+g++ -Iinclude -std=c++20 -O1 -g -Wall -Wextra -Wpedantic -Werror -pthread -fsanitize=thread -fno-omit-frame-pointer -fno-pie -no-pie tests/core_test.cpp -o build/core-test-tsan
+./build/core-test-tsan
+core: 18 checks passed
+g++ -Iinclude -std=c++20 -O1 -g -Wall -Wextra -Wpedantic -Werror -pthread -fsanitize=thread -fno-omit-frame-pointer -fno-pie -no-pie src/main.cpp src/collector.cpp src/producer.cpp src/sink.cpp -o build/prento-tsan
+PRENTO_BINARY=<PROJECT_ROOT>/build/prento-tsan python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_schedule_covers_each_combination_and_repeats_order (test_bench.BenchTest.test_schedule_covers_each_combination_and_repeats_order) ... ok
+test_seed_parser_rejects_ambiguous_and_invalid_inputs (test_bench.BenchTest.test_seed_parser_rejects_ambiguous_and_invalid_inputs) ... ok
+test_archive_manifest_detects_changed_files (test_bundle.BundleTest.test_archive_manifest_detects_changed_files) ... ok
+test_bundle_rejects_escape_and_symlinks (test_bundle.BundleTest.test_bundle_rejects_escape_and_symlinks) ... ok
+test_bundle_rejects_reserved_metadata_names (test_bundle.BundleTest.test_bundle_rejects_reserved_metadata_names) ... ok
+test_strict_verification_rejects_unlisted_files (test_bundle.BundleTest.test_strict_verification_rejects_unlisted_files) ... ok
+test_failed_test_retains_process_artifacts (test_diagnostics.DiagnosticsTest.test_failed_test_retains_process_artifacts) ... ok
+test_all_four_modes_complete_and_respect_budget (test_network.NetworkTest.test_all_four_modes_complete_and_respect_budget) ... ok
+test_corrupt_body_never_gets_success_ack (test_network.NetworkTest.test_corrupt_body_never_gets_success_ack) ... ok
+test_idle_sink_connection_can_be_reused (test_network.NetworkTest.test_idle_sink_connection_can_be_reused) ... ok
+test_invalid_options_fail (test_network.NetworkTest.test_invalid_options_fail) ... ok
+test_low_rate_producers_keep_idle_connections (test_network.NetworkTest.test_low_rate_producers_keep_idle_connections) ... ok
+test_overload_accounts_for_every_generated_item (test_network.NetworkTest.test_overload_accounts_for_every_generated_item) ... ok
+test_oversized_header_is_rejected_without_body (test_network.NetworkTest.test_oversized_header_is_rejected_without_body) ... ok
+test_producer_termination_interrupts_scheduled_wait (test_network.NetworkTest.test_producer_termination_interrupts_scheduled_wait) ... ok
+test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct) ... ok
+test_sink_loss_produces_explicit_unknown_outcomes (test_network.NetworkTest.test_sink_loss_produces_explicit_unknown_outcomes) ... ok
+test_stalled_body_releases_reservation (test_network.NetworkTest.test_stalled_body_releases_reservation) ... ok
+test_impossible_completed_timestamps_are_rejected (test_report.ReportTest.test_impossible_completed_timestamps_are_rejected) ... ok
+test_matching_modes_require_same_experiment_and_binary (test_report.ReportTest.test_matching_modes_require_same_experiment_and_binary) ... ok
+test_paired_comparison_validates_inputs_and_preserves_failures (test_report.ReportTest.test_paired_comparison_validates_inputs_and_preserves_failures) ... ok
+test_report_includes_losses_and_uses_nearest_rank (test_report.ReportTest.test_report_includes_losses_and_uses_nearest_rank) ... ok
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... ok
+test_fifo_preserves_order_in_both_admission_modes (test_scheduling.SchedulingTest.test_fifo_preserves_order_in_both_admission_modes) ... ok
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... ok
+test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) ... ok
+test_ready_fifo_preserves_order (test_service_priority.ServicePriorityTest.test_ready_fifo_preserves_order) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 11.124s
+
+OK
+
+
+Docker QA build
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.57kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 112B 0.0s done
+#3 DONE 0.0s
+
+#4 [build 1/8] FROM docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9
+#4 resolve docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 37.41kB 0.1s done
+#5 DONE 0.1s
+
+#6 [build 4/8] COPY CMakeLists.txt ./
+#6 CACHED
+
+#7 [build 8/8] RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release     && cmake --build build && ctest --test-dir build --output-on-failure
+#7 CACHED
+
+#8 [build 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     g++ cmake ninja-build ca-certificates && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [build 7/8] COPY tests/core_test.cpp ./tests/core_test.cpp
+#9 CACHED
+
+#10 [qa 1/4] RUN apt-get update && apt-get install -y --no-install-recommends     make python3 util-linux && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [build 5/8] COPY include ./include
+#11 CACHED
+
+#12 [build 6/8] COPY src ./src
+#12 CACHED
+
+#13 [build 3/8] WORKDIR /src
+#13 CACHED
+
+#14 [qa 2/4] COPY Makefile ./
+#14 CACHED
+
+#15 [qa 3/4] COPY tests ./tests
+#15 DONE 0.0s
+
+#16 [qa 4/4] COPY scripts ./scripts
+#16 DONE 0.0s
+
+#17 exporting to image
+#17 exporting layers 0.1s done
+#17 exporting manifest sha256:db9cdc01b529a01b3577afd5b467c98cfe160f1a33e4bc684f5f41249d48b4d1 0.0s done
+#17 exporting config sha256:a6df3e7e0b656d2ccf9a8a2b33d0815302586ac503054ec61f7cf67ff82997a0 0.0s done
+#17 exporting attestation manifest sha256:b250b72618eea5e023eb1882797d75c3ba625bc17b9960b6fe1147dd31c8c3f3 0.0s done
+#17 exporting manifest list sha256:61836acf5a510142d358279a5d4e93cfbb6676309e8b3c69c1e9c41f345c0c83 0.0s done
+#17 naming to docker.io/library/prento:qa-tools done
+#17 unpacking to docker.io/library/prento:qa-tools 0.1s done
+#17 DONE 0.3s
+
+
+Docker QA suite
+./build/core-test
+core: 18 checks passed
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_schedule_covers_each_combination_and_repeats_order (test_bench.BenchTest.test_schedule_covers_each_combination_and_repeats_order) ... ok
+test_seed_parser_rejects_ambiguous_and_invalid_inputs (test_bench.BenchTest.test_seed_parser_rejects_ambiguous_and_invalid_inputs) ... ok
+test_archive_manifest_detects_changed_files (test_bundle.BundleTest.test_archive_manifest_detects_changed_files) ... ok
+test_bundle_rejects_escape_and_symlinks (test_bundle.BundleTest.test_bundle_rejects_escape_and_symlinks) ... ok
+test_bundle_rejects_reserved_metadata_names (test_bundle.BundleTest.test_bundle_rejects_reserved_metadata_names) ... ok
+test_strict_verification_rejects_unlisted_files (test_bundle.BundleTest.test_strict_verification_rejects_unlisted_files) ... ok
+test_failed_test_retains_process_artifacts (test_diagnostics.DiagnosticsTest.test_failed_test_retains_process_artifacts) ... ok
+test_all_four_modes_complete_and_respect_budget (test_network.NetworkTest.test_all_four_modes_complete_and_respect_budget) ... ok
+test_corrupt_body_never_gets_success_ack (test_network.NetworkTest.test_corrupt_body_never_gets_success_ack) ... ok
+test_idle_sink_connection_can_be_reused (test_network.NetworkTest.test_idle_sink_connection_can_be_reused) ... ok
+test_invalid_options_fail (test_network.NetworkTest.test_invalid_options_fail) ... ok
+test_low_rate_producers_keep_idle_connections (test_network.NetworkTest.test_low_rate_producers_keep_idle_connections) ... ok
+test_overload_accounts_for_every_generated_item (test_network.NetworkTest.test_overload_accounts_for_every_generated_item) ... ok
+test_oversized_header_is_rejected_without_body (test_network.NetworkTest.test_oversized_header_is_rejected_without_body) ... ok
+test_producer_termination_interrupts_scheduled_wait (test_network.NetworkTest.test_producer_termination_interrupts_scheduled_wait) ... ok
+test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct) ... ok
+test_sink_loss_produces_explicit_unknown_outcomes (test_network.NetworkTest.test_sink_loss_produces_explicit_unknown_outcomes) ... ok
+test_stalled_body_releases_reservation (test_network.NetworkTest.test_stalled_body_releases_reservation) ... ok
+test_impossible_completed_timestamps_are_rejected (test_report.ReportTest.test_impossible_completed_timestamps_are_rejected) ... ok
+test_matching_modes_require_same_experiment_and_binary (test_report.ReportTest.test_matching_modes_require_same_experiment_and_binary) ... ok
+test_paired_comparison_validates_inputs_and_preserves_failures (test_report.ReportTest.test_paired_comparison_validates_inputs_and_preserves_failures) ... ok
+test_report_includes_losses_and_uses_nearest_rank (test_report.ReportTest.test_report_includes_losses_and_uses_nearest_rank) ... ok
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... ok
+test_fifo_preserves_order_in_both_admission_modes (test_scheduling.SchedulingTest.test_fifo_preserves_order_in_both_admission_modes) ... ok
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... ok
+test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) ... ok
+test_ready_fifo_preserves_order (test_service_priority.ServicePriorityTest.test_ready_fifo_preserves_order) ... ok
+
+----------------------------------------------------------------------
+Ran 27 tests in 10.523s
+
+OK
+
+
+Three intentional scheduling defects rejected
+=== disabled-admission-priority: test exit 1 ===
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... 
+  test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='push') ... FAIL
+  test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='credit') ... FAIL
+
+======================================================================
+FAIL: test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='push')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 170, in test_later_critical_overtakes_earlier_bulk_in_both_admission_modes
+    self.run_case(admission,"priority")
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 154, in run_case
+    self.assertEqual(backend.received,expected)
+AssertionError: Lists differ: [1, 2, 3] != [1, 3, 2]
+
+First differing element 1:
+2
+3
+
+- [1, 2, 3]
++ [1, 3, 2]
+
+======================================================================
+FAIL: test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='credit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 170, in test_later_critical_overtakes_earlier_bulk_in_both_admission_modes
+    self.run_case(admission,"priority")
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 154, in run_case
+    self.assertEqual(backend.received,expected)
+AssertionError: Lists differ: [1, 2, 3] != [1, 3, 2]
+
+First differing element 1:
+2
+3
+
+- [1, 2, 3]
++ [1, 3, 2]
+
+----------------------------------------------------------------------
+Ran 1 test in 0.302s
+
+FAILED (failures=2)
+
+=== disabled-service-priority: test exit 1 ===
+test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) ... 
+  test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) (admission='push') ... FAIL
+  test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) (admission='credit') ... FAIL
+
+======================================================================
+FAIL: test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) (admission='push')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_service_priority.py", line 92, in test_ready_critical_overtakes_ready_bulk
+    self.run_case(admission, "priority")
+  File "<PROJECT_ROOT>/tests/test_service_priority.py", line 75, in run_case
+    self.assertEqual(backend.received, [1, 3, 2] if policy == "priority" else [1, 2, 3])
+AssertionError: Lists differ: [1, 2, 3] != [1, 3, 2]
+
+First differing element 1:
+2
+3
+
+- [1, 2, 3]
++ [1, 3, 2]
+
+======================================================================
+FAIL: test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityTest.test_ready_critical_overtakes_ready_bulk) (admission='credit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_service_priority.py", line 92, in test_ready_critical_overtakes_ready_bulk
+    self.run_case(admission, "priority")
+  File "<PROJECT_ROOT>/tests/test_service_priority.py", line 75, in run_case
+    self.assertEqual(backend.received, [1, 3, 2] if policy == "priority" else [1, 2, 3])
+AssertionError: Lists differ: [1, 2, 3] != [1, 3, 2]
+
+First differing element 1:
+2
+3
+
+- [1, 2, 3]
++ [1, 3, 2]
+
+----------------------------------------------------------------------
+Ran 1 test in 0.296s
+
+FAILED (failures=2)
+
+=== premature-grant: test exit 1 ===
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... FAIL
+
+======================================================================
+FAIL: test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 178, in test_credit_is_withheld_while_full_then_resumes_after_completion
+    self.run_case("credit","priority",verify_no_grant=True)
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 129, in run_case
+    with self.assertRaises(socket.timeout):
+AssertionError: TimeoutError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.157s
+
+FAILED (failures=1)
+
+All three intentional defects were rejected; original source was unchanged.

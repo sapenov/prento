@@ -9,14 +9,15 @@ Evidence paths below are relative to `qa/logs/validation/`.
 | Check | Recorded result | Evidence |
 |---|---|---|
 | README and results figure | Source-value, local-link/anchor and integrity checks passed; normal/narrow/grayscale inspection; native suite and short Compose comparison passed | `../readme-validation.log` |
-| Native warnings-as-errors build | 18 core checks and 26 Python tests passed | `native.log` |
-| ASan/UBSan | 18 core checks and 26 Python tests passed | `asan-ubsan.log` |
-| TSan | 18 core checks and 26 Python tests passed with per-process `setarch -R` | `tsan.log` |
-| Mutation checks | Admission-priority, service-priority and premature-grant defects independently rejected | `mutations.log` |
-| Docker QA build and tests | Build passed; 18 core checks and 26 Python tests passed | `docker-qa-build.log`, `docker-qa-tests.log` |
+| Native warnings-as-errors build | 18 core checks and 27 Python tests passed | `../port-allocation-validation.log` |
+| ASan/UBSan | 18 core checks and 27 Python tests passed | `../port-allocation-validation.log` |
+| TSan | 18 core checks and 27 Python tests passed with per-process `setarch -R` | `../port-allocation-validation.log` |
+| Mutation checks | Admission-priority, service-priority and premature-grant defects independently rejected | `../port-allocation-validation.log` |
+| Docker QA build and tests | Build passed; 18 core checks and 27 Python tests passed | `../port-allocation-validation.log` |
+| Distinct test endpoints | A controlled repeated candidate cannot alias sink, ingest or metrics ports; real TCP regression passed | `../port-allocation-validation.log` |
 | Runtime and benchmark images | Both targets built; benchmark entrypoint completed all four modes | `docker-runtime-build.log`, `docker-bench-build.log`, `docker-bench-smoke.log` |
 | Compose runtime | Configuration passed; 300/300 messages completed, no drops or unknowns; isolated stack removed | `compose.log` |
-| Clean QA extraction | Strict checksums, original 144-trial audit, fresh build, 18 core checks and 26 Python tests passed | `bundle.log` |
+| Clean QA extraction | Strict checksums, original 144-trial audit, fresh build, 18 core checks and 27 Python tests passed | `../port-allocation-bundle.log` |
 | Measured-source snapshot | CMake build and core tests passed using the Docker toolchain | `cmake.log` |
 | Functional benchmark smoke | 144 short trials, 1,620/1,620 messages; input, accounting and latency checks passed | `benchmark-smoke.log`, `smoke-evidence.json` |
 | Source and evidence integrity | Measured source matches recorded hashes; live application differs by naming substitutions only; supplied benchmark evidence unchanged | `provenance.json` |

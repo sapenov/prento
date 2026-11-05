@@ -3,13 +3,17 @@ README and results figure verification
 {
   "local_links_and_anchors": "passed",
   "excluded_company_scan": "clear",
-  "preserved_source_and_evidence_files": 1395,
+  "preserved_source_and_evidence_files": 1392,
   "original_bytes_unchanged": true,
   "svg_accessibility": "title, description and complete README alt text",
   "visual_inspection": "normal, narrow and grayscale checked",
-  "readme_words": 804
+  "readme_words": 805,
+  "test_harness_changes_verified_separately": [
+    "tests/test_network.py",
+    "tests/test_scheduling.py",
+    "tests/test_service_priority.py"
+  ]
 }
-
 
 Preserved benchmark audit
 {
@@ -43,6 +47,7 @@ test_low_rate_producers_keep_idle_connections (test_network.NetworkTest.test_low
 test_overload_accounts_for_every_generated_item (test_network.NetworkTest.test_overload_accounts_for_every_generated_item) ... ok
 test_oversized_header_is_rejected_without_body (test_network.NetworkTest.test_oversized_header_is_rejected_without_body) ... ok
 test_producer_termination_interrupts_scheduled_wait (test_network.NetworkTest.test_producer_termination_interrupts_scheduled_wait) ... ok
+test_reused_port_candidate_keeps_service_endpoints_distinct (test_network.NetworkTest.test_reused_port_candidate_keeps_service_endpoints_distinct) ... ok
 test_sink_loss_produces_explicit_unknown_outcomes (test_network.NetworkTest.test_sink_loss_produces_explicit_unknown_outcomes) ... ok
 test_stalled_body_releases_reservation (test_network.NetworkTest.test_stalled_body_releases_reservation) ... ok
 test_impossible_completed_timestamps_are_rejected (test_report.ReportTest.test_impossible_completed_timestamps_are_rejected) ... ok
@@ -56,7 +61,7 @@ test_ready_critical_overtakes_ready_bulk (test_service_priority.ServicePriorityT
 test_ready_fifo_preserves_order (test_service_priority.ServicePriorityTest.test_ready_fifo_preserves_order) ... ok
 
 ----------------------------------------------------------------------
-Ran 26 tests in 10.610s
+Ran 27 tests in 10.728s
 
 OK
 

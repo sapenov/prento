@@ -1,5 +1,6 @@
 """Real-process checks. No mocked collector or transport."""
 import csv
+import contextlib
 import json
 import os
 from pathlib import Path
@@ -11,6 +12,7 @@ import sys
 import tempfile
 import time
 import unittest
+from unittest.mock import patch
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,6 +22,14 @@ def port():
     with socket.socket() as s:
         s.bind(("127.0.0.1", 0))
         return s.getsockname()[1]
+
+def ports(count):
+    chosen = []
+    while len(chosen) < count:
+        candidate = port()
+        if candidate not in chosen:
+            chosen.append(candidate)
+    return tuple(chosen)
 
 def wait_port(number, process):
     deadline = time.monotonic() + 5
@@ -71,7 +81,7 @@ class NetworkTest(unittest.TestCase):
         return p
 
     def stack(self, admission="push", policy="fifo", **options):
-        sink_port, collector_port, metrics_port = port(), port(), port()
+        sink_port, collector_port, metrics_port = ports(3)
         sink = self.start("sink", "--port", sink_port, "--bytes-per-sec", options.get("rate", 1000000),
                           "--outage-start-ms", options.get("outage_start", 0),
                           "--outage-ms", options.get("outage_ms", 0))
@@ -119,6 +129,25 @@ class NetworkTest(unittest.TestCase):
                         values = dict(line.split() for line in f.read().decode().splitlines() if not line.startswith("#"))
                     self.assertLessEqual(int(values["prento_reserved_peak_bytes"]), 65536)
                     self.assertEqual(int(values["prento_reserved_bytes"]), 0)
+
+    def test_reused_port_candidate_keeps_service_endpoints_distinct(self):
+        # The OS may return a port again after its probe socket is closed.
+        with contextlib.ExitStack() as held:
+            candidates = []
+            for _ in range(3):
+                probe = held.enter_context(socket.socket())
+                probe.bind(("127.0.0.1", 0))
+                candidates.append(probe.getsockname()[1])
+        sink_port, collector_port, metrics_port = candidates
+        with patch(__name__ + '.port', side_effect=[sink_port, sink_port, collector_port, metrics_port]):
+            _, _, target, metrics = self.stack()
+        self.assertEqual(target, collector_port)
+        self.assertEqual(metrics, metrics_port)
+        with socket.create_connection(("127.0.0.1", target), timeout=1):
+            pass
+        with urllib.request.urlopen(f"http://127.0.0.1:{metrics}/metrics", timeout=1) as response:
+            self.assertEqual(response.status, 200)
+            self.assertIn(b'prento_buffer_limit_bytes 65536', response.read())
 
     def test_sink_loss_produces_explicit_unknown_outcomes(self):
         sink, _, target, _ = self.stack(timeout=300)

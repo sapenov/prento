@@ -15,6 +15,7 @@ Prento uses dependency-free C++20 and POSIX TCP sockets to compare receiver cred
 | Measurement validation | Paired comparisons require matching logical workloads, sink/load/buffer/queue/timeout settings and recorded executable identities. Timestamp intervals include all pre-send and post-send work. |
 | Scheduling | Controlled TCP tests independently verify admission priority and service order among ready payloads. Separate mutations verify sensitivity to both selectors and premature grants. |
 | Failure diagnostics | NetworkTest failures retain commands, logs, outcomes, producer output and timeout information. A filesystem fixture verifies retention; CI uploads the artifacts. |
+| Test endpoints | Process-test stacks select distinct sink, ingest and metrics ports even when the OS reuses a probe candidate. A deterministic regression checks real ingest and HTTP metrics connections. |
 | Results visualization | The README figure is generated from the preserved summaries, checked against equally weighted run means, and inspected at normal/narrow sizes and in grayscale. Benchmark evidence is read-only. |
 | Packaging | Metadata distinguishes source payloads, checked payloads and archive entries. Reserved names are rejected. Strict checksum verification detects extra files in a fresh extraction. |
 
@@ -24,7 +25,7 @@ Git attributes preserve source and experiment bytes across checkout platforms. W
 
 The [CI workflow](../.github/workflows/ci.yml) runs native tests, sanitizers and the runtime Docker build. On the measured WSL host, TSan requires per-process `setarch -R` to avoid a startup memory-mapping failure; no host-wide setting is changed. [QA verification](../qa/VERIFICATION.md) identifies the commands, logs and measured-image provenance.
 
-The suite contains 18 core checks and 26 Python tests. The three-service Compose demo completed 300/300 messages. The main performance matrix completed 79,236/79,236 messages across 144 trials. The [measured source snapshot](../qa/measurement-source/README.md) matches the recorded application fingerprints. Live source and tools consistently use Prento identifiers; archived results retain their measured names and executable identity.
+The suite contains 18 core checks and 27 Python tests. The three-service Compose demo completed 300/300 messages. The main performance matrix completed 79,236/79,236 messages across 144 trials. The [measured source snapshot](../qa/measurement-source/README.md) matches the recorded application fingerprints. Live source and tools consistently use Prento identifiers; archived results retain their measured names and executable identity.
 
 ## Limits and further work
 

@@ -65,7 +65,7 @@ Application-layer receiver control draws inspiration from Homa; the implementati
 
 ## Validation and scope
 
-Real TCP integration tests cover accounting, admission order, ready-work scheduling and failure behavior. The recorded suite passes **18 core checks and 26 Python tests**, ASan/UBSan, TSan and three mutation checks. [Verification evidence](qa/VERIFICATION.md).
+Real TCP integration tests cover accounting, admission order, ready-work scheduling and failure behavior. The recorded suite passes **18 core checks and 27 Python tests**, ASan/UBSan, TSan and three mutation checks. [Verification evidence](qa/VERIFICATION.md).
 
 Traffic classes are synthetic labels. The custom protocol acknowledges processing rather than durable storage. The [Kubernetes manifest](deploy/kubernetes.yaml) is an illustrative deployment configuration; production adapters and multi-node scaling remain validation work.
 

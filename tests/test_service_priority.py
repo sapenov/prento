@@ -28,7 +28,7 @@ class ServicePriorityTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp:
             log = open(Path(tmp) / "collector.log", "w+")
             try:
-                port, metrics = network.port(), network.port()
+                port, metrics = network.ports(2)
                 collector = subprocess.Popen(
                     [str(network.BIN), "collector", "--port", str(port), "--metrics-port", str(metrics),
                      "--sink", f"127.0.0.1:{backend.port}", "--admission", admission, "--policy", policy,

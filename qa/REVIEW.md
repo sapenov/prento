@@ -10,9 +10,10 @@ Automated tests exercise the real C++ producer, collector and sink over TCP. AI-
 | Independent sensitivity | Three temporary mutations disable admission priority, disable service priority or grant before reservation. Each is rejected by the relevant integration test. |
 | Reports | Reject invalid completed timestamps, duplicate IDs, different logical inputs and mismatched settings or recorded executable identities. Retain completion changes and bulk costs. |
 | Archive integrity | Check metadata counts, reject reserved metadata names and verify listed checksums. Strict mode also rejects unlisted files in a fresh extraction. |
+| Test endpoint allocation | A repeated port candidate cannot assign the same port to separate service roles. A deterministic regression starts real services and verifies ingest connectivity and the HTTP metrics response. |
 | Failure diagnostics | A filesystem fixture verifies NetworkTest artifact retention; CI uploads the directory on failure. Scheduling/service-order failures are reported in test output. |
 
-The suite contains 18 core checks and 26 Python tests. Recorded native, sanitizer and container results are listed in the [verification summary](VERIFICATION.md).
+The suite contains 18 core checks and 27 Python tests. Recorded native, sanitizer and container results are listed in the [verification summary](VERIFICATION.md).
 
 ## Open questions
 

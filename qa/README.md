@@ -26,7 +26,7 @@ setarch "$(uname -m)" -R make tsan > qa-local/tsan.log 2>&1
 python3 scripts/mutation_checks.py > qa-local/mutations.log 2>&1
 ```
 
-Expected: 18 core checks and 26 Python tests pass in each suite. The mutation checker succeeds when tests reject all three deliberate defects: disabled admission priority, disabled service priority and a premature credit grant. It builds temporary copies without editing repository source.
+Expected: 18 core checks and 27 Python tests pass in each suite. The mutation checker succeeds when tests reject all three deliberate defects: disabled admission priority, disabled service priority and a premature credit grant. It builds temporary copies without editing repository source.
 
 On the measured WSL host, TSan requires per-process `setarch -R` to avoid an `unexpected memory mapping` startup failure. If that operation or TSan is unavailable, record the race check as not run. Sanitizers cover only executed paths and interleavings.
 
