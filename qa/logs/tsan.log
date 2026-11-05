@@ -1,0 +1,5 @@
+mkdir -p build
+g++ -Iinclude -std=c++20 -O1 -g -Wall -Wextra -Wpedantic -Werror -pthread -fsanitize=thread -fno-omit-frame-pointer -fno-pie -no-pie tests/core_test.cpp -o build/core-test-tsan
+./build/core-test-tsan
+FATAL: ThreadSanitizer: unexpected memory mapping 0x7421cc272000-0x7421cc700000
+make: *** [Makefile:32: tsan] Error 66

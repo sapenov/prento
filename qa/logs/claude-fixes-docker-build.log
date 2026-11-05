@@ -1,0 +1,64 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.56kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 112B 0.0s done
+#3 DONE 0.0s
+
+#4 [build 1/8] FROM docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9
+#4 resolve docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 73.86kB 0.1s done
+#5 DONE 0.1s
+
+#6 [build 4/8] COPY CMakeLists.txt ./
+#6 CACHED
+
+#7 [build 6/8] COPY src ./src
+#7 CACHED
+
+#8 [build 3/8] WORKDIR /src
+#8 CACHED
+
+#9 [build 7/8] COPY tests/core_test.cpp ./tests/core_test.cpp
+#9 CACHED
+
+#10 [qa 1/4] RUN apt-get update && apt-get install -y --no-install-recommends     make python3 util-linux && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [build 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     g++ cmake ninja-build ca-certificates && rm -rf /var/lib/apt/lists/*
+#11 CACHED
+
+#12 [build 5/8] COPY include ./include
+#12 CACHED
+
+#13 [build 8/8] RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release     && cmake --build build && ctest --test-dir build --output-on-failure
+#13 CACHED
+
+#14 [qa 2/4] COPY Makefile ./
+#14 CACHED
+
+#15 [qa 3/4] COPY tests ./tests
+#15 DONE 0.0s
+
+#16 [qa 4/4] COPY scripts ./scripts
+#16 DONE 0.0s
+
+#17 exporting to image
+#17 exporting layers 0.1s done
+#17 exporting manifest sha256:bd253dd544b16cdbef381034b4bf8ef7a62d800ba95b678d0ff549eaa0e2311a 0.0s done
+#17 exporting config sha256:8a653b9ab2a7b8ae4a634415639fb746dc7363b23f7fc2e29c699070d253b03b
+#17 exporting config sha256:8a653b9ab2a7b8ae4a634415639fb746dc7363b23f7fc2e29c699070d253b03b 0.0s done
+#17 exporting attestation manifest sha256:ee8bf15d9e7a84f87d48dbebde1cbcb27cc73cac6595669d4685b9384e119e06 0.0s done
+#17 exporting manifest list sha256:bff8a2f32b4b67c74e040df28205b79cc448adf4202ec31d91f9ea367ffe7e2b 0.0s done
+#17 naming to docker.io/library/fanin-lab-cpp:qa-tools done
+#17 unpacking to docker.io/library/fanin-lab-cpp:qa-tools 0.0s done
+#17 DONE 0.3s

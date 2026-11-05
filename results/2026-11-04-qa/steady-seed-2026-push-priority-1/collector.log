@@ -1,0 +1,10 @@
+collector listening 40905 push/priority
+fanin_reserved_bytes 0
+fanin_reserved_peak_bytes 32768
+fanin_buffer_limit_bytes 262144
+fanin_admitted_total 500
+fanin_admitted_bytes_total 15571200
+fanin_completed_total 500
+fanin_failed_total 0
+fanin_waiting_announcements 0
+fanin_ready_batches 0

@@ -1,0 +1,10 @@
+/build/
+/build-cmake/
+**/__pycache__/
+/results/latest/
+/results/local-*/
+*.core
+/outcomes.csv
+/dist/
+/qa-local/
+/qa-private/

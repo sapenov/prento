@@ -1,0 +1,9 @@
+steady-seed-42-push-priority-1: generated=20 completed=20 drops=0 unknown=0
+steady-seed-7-credit-fifo-1: generated=20 completed=20 drops=0 unknown=0
+steady-seed-7-credit-priority-1: generated=20 completed=20 drops=0 unknown=0
+steady-seed-42-credit-priority-1: generated=20 completed=20 drops=0 unknown=0
+steady-seed-7-push-priority-1: generated=20 completed=20 drops=0 unknown=0
+steady-seed-42-credit-fifo-1: generated=20 completed=20 drops=0 unknown=0
+steady-seed-7-push-fifo-1: generated=20 completed=20 drops=0 unknown=0
+steady-seed-42-push-fifo-1: generated=20 completed=20 drops=0 unknown=0
+report: /results/smoke/REPORT.md

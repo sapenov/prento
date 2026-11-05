@@ -1,0 +1,63 @@
+=== disabled-priority: test exit 1 ===
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... 
+  test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='push') ... FAIL
+  test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='credit') ... FAIL
+
+======================================================================
+FAIL: test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='push')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 170, in test_later_critical_overtakes_earlier_bulk_in_both_admission_modes
+    self.run_case(admission,"priority")
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 154, in run_case
+    self.assertEqual(backend.received,expected)
+AssertionError: Lists differ: [1, 2, 3] != [1, 3, 2]
+
+First differing element 1:
+2
+3
+
+- [1, 2, 3]
++ [1, 3, 2]
+
+======================================================================
+FAIL: test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) (admission='credit')
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 170, in test_later_critical_overtakes_earlier_bulk_in_both_admission_modes
+    self.run_case(admission,"priority")
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 154, in run_case
+    self.assertEqual(backend.received,expected)
+AssertionError: Lists differ: [1, 2, 3] != [1, 3, 2]
+
+First differing element 1:
+2
+3
+
+- [1, 2, 3]
++ [1, 3, 2]
+
+----------------------------------------------------------------------
+Ran 1 test in 0.308s
+
+FAILED (failures=2)
+
+=== premature-grant: test exit 1 ===
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... FAIL
+
+======================================================================
+FAIL: test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 178, in test_credit_is_withheld_while_full_then_resumes_after_completion
+    self.run_case("credit","priority",verify_no_grant=True)
+  File "<PROJECT_ROOT>/tests/test_scheduling.py", line 129, in run_case
+    with self.assertRaises(socket.timeout):
+AssertionError: TimeoutError not raised
+
+----------------------------------------------------------------------
+Ran 1 test in 0.162s
+
+FAILED (failures=1)
+
+Both intentional defects were rejected; original source was unchanged.

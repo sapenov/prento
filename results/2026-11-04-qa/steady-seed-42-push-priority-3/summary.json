@@ -1,0 +1,75 @@
+{
+  "generated": 500,
+  "generated_bytes": 15668736,
+  "workload_sha256": "9fca6d7924b6e8d2dadf5f4e43522c439c4aa3385679849ea28c1e6633d4d91a",
+  "completed": 500,
+  "completed_bytes": 15668736,
+  "failed_unknown": 0,
+  "failed_unknown_bytes": 0,
+  "producer_drop": 0,
+  "producer_drop_bytes": 0,
+  "classes": {
+    "critical": {
+      "generated": 22,
+      "completed": 22,
+      "completion_fraction": 1.0,
+      "mean_ms": 0.7346946818181818,
+      "mean_pre_send_ms": 0.20532763636363638,
+      "mean_post_send_ms": 0.5293670454545455,
+      "p50_ms": 0.656258,
+      "p99_ms": 1.586417,
+      "p999_ms": 1.586417,
+      "max_ms": 1.586417,
+      "p99_equals_max": true,
+      "producer_wait_p99_ms": 0.556162
+    },
+    "bulk": {
+      "generated": 478,
+      "completed": 478,
+      "completion_fraction": 1.0,
+      "mean_ms": 8.731171748953974,
+      "mean_pre_send_ms": 0.25146495815899583,
+      "mean_post_send_ms": 8.47970679079498,
+      "p50_ms": 8.647078,
+      "p99_ms": 10.061328,
+      "p999_ms": 11.464471,
+      "max_ms": 11.464471,
+      "p99_equals_max": false,
+      "producer_wait_p99_ms": 0.813955
+    }
+  },
+  "offered_bytes_per_sec": 3133747.2,
+  "completion_bytes_per_sec_during_offer": 3133747.2,
+  "drain_ms": 0,
+  "scenario": "steady",
+  "admission": "push",
+  "policy": "priority",
+  "repeat": 3,
+  "seed": 42,
+  "measurements": {
+    "collector_peak_rss_kib": 4984,
+    "producer_peak_rss_kib": 5256,
+    "sink_peak_rss_kib": 4324,
+    "sink_sampled_cpu_seconds": 0.14,
+    "collector_sampled_cpu_seconds": 0.15,
+    "producer_sampled_cpu_seconds": 0.15,
+    "collector_final_counters": {
+      "fanin_reserved_bytes": 0,
+      "fanin_reserved_peak_bytes": 32768,
+      "fanin_buffer_limit_bytes": 262144,
+      "fanin_admitted_total": 500,
+      "fanin_admitted_bytes_total": 15668736,
+      "fanin_completed_total": 500,
+      "fanin_failed_total": 0,
+      "fanin_waiting_announcements": 0,
+      "fanin_ready_batches": 0
+    }
+  },
+  "producer_summary": {
+    "generated": 500,
+    "completed": 500,
+    "failed_unknown": 0,
+    "producer_drop": 0,
+    "sum_per_producer_peak_queued_bytes": 524288
+  }
+}

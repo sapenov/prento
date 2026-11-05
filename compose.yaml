@@ -1,0 +1,48 @@
+name: prento
+x-runtime: &runtime
+  image: prento:local
+  build:
+    context: .
+    target: runtime
+  init: true
+  read_only: true
+  cap_drop: [ALL]
+  security_opt: [no-new-privileges:true]
+  cpus: 1.0
+  mem_limit: 256m
+  pids_limit: 256
+  stop_grace_period: 8s
+
+services:
+  sink:
+    <<: *runtime
+    command: [sink, --bind, 0.0.0.0, --port, "9001", --bytes-per-sec, "4194304", --slow-start-ms, "1000", --slow-ms, "1000", --slow-factor, "10"]
+  collector:
+    <<: *runtime
+    depends_on: [sink]
+    command: [collector, --bind, 0.0.0.0, --port, "9000", --metrics-port, "9090", --sink, "sink:9001", --admission, "${ADMISSION:-credit}", --policy, "${POLICY:-priority}", --buffer-bytes, "262144"]
+    ports: ["127.0.0.1:19090:9090"]
+  producer:
+    <<: *runtime
+    depends_on: [collector]
+    command: [producer, --target, "collector:9000", --admission, "${ADMISSION:-credit}", --start-delay-ms, "500", --duration-ms, "3000", --rate, "100", --producers, "16", --queue-items, "16", --output, "/results/outcomes.csv"]
+    read_only: true
+    volumes: ["demo-results:/results"]
+  benchmark:
+    profiles: [bench]
+    build:
+      context: .
+      target: bench
+    image: prento:bench
+    init: true
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    cpus: 4.0
+    mem_limit: 1g
+    pids_limit: 512
+    volumes: ["bench-results:/results"]
+
+volumes:
+  demo-results:
+  bench-results:

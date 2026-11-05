@@ -1,0 +1,20 @@
+{
+  "platform": "Linux-6.18.33.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "cpu_count": 16,
+  "python": "3.12.3 (main, Aug 31 2026, 10:18:26) [GCC 13.3.0]",
+  "argv": [
+    "/lab/scripts/bench.py",
+    "--binary",
+    "/usr/local/bin/fanin",
+    "--output",
+    "/results/2026-11-04",
+    "--duration-ms",
+    "3000",
+    "--repeats",
+    "3"
+  ],
+  "cpu_model": "Intel(R) Core(TM) i9-10885H CPU @ 2.40GHz",
+  "binary_sha256": "bc87d775b8918b8336514a614e20b5066e2b51675699c795c6fbe94556795660",
+  "cgroup_cpu_max": "400000 100000",
+  "cgroup_memory_max": "1073741824"
+}

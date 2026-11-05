@@ -1,0 +1,12 @@
+{
+  "CMakeLists.txt": "d893c011baef66dff35590564a44e00f65c0f9cb13f024dab7b47f13015e7941",
+  "include/fanin/app.hpp": "b9c48bc9afd07f38f206fba6b6975c7ba124cc5d73a6d46bbaa2953af06a743d",
+  "include/fanin/core.hpp": "887248ca8a613293f59f410fcb37fb152781772e7d581975bd3e7f5939732d09",
+  "include/fanin/net.hpp": "687056ad2d02787e083c93242599186fcea6a47ac58bdddd9af2349d78765b5b",
+  "include/fanin/threads.hpp": "194ce989797dccbe29a215543b3a3a4b33410e1d7dfc4321aebc782ec5a88b01",
+  "include/fanin/timing.hpp": "93143537e98cbc4c3807f2e4b14548522d836026e7afc1a8ceb53e67e17c71b1",
+  "src/collector.cpp": "cef2523a1866eceb6c17afe949fc271aab3ac5fa84bb13c4e1e97d50d0048e2d",
+  "src/main.cpp": "92dda8d0409cd6bf184d767ab053cd08907a0eceb8dd855d81e537d8bfac3182",
+  "src/producer.cpp": "560bfb9e15f05679eb35ebc6aa99ff8c7543e9a4224d6e8cb2fcb38f56df4770",
+  "src/sink.cpp": "38a2654dd65c41f212a7526f1f28ab6557b226b26587cd54e0b83c5af7a535bc"
+}

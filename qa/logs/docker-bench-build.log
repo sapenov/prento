@@ -1,0 +1,247 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.26kB 0.0s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 0.2s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 87B 0.0s done
+#3 DONE 0.0s
+
+#4 [build 1/8] FROM docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9
+#4 resolve docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 35.34kB 0.1s done
+#5 DONE 0.1s
+
+#6 [build 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     g++ cmake ninja-build ca-certificates && rm -rf /var/lib/apt/lists/*
+#6 CACHED
+
+#7 [build 3/8] WORKDIR /src
+#7 CACHED
+
+#8 [build 4/8] COPY CMakeLists.txt ./
+#8 CACHED
+
+#9 [build 5/8] COPY include ./include
+#9 DONE 0.0s
+
+#10 [build 6/8] COPY src ./src
+#10 DONE 0.0s
+
+#11 [build 7/8] COPY tests/core_test.cpp ./tests/core_test.cpp
+#11 DONE 0.0s
+
+#12 [build 8/8] RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release     && cmake --build build && ctest --test-dir build --output-on-failure
+#12 0.721 -- The CXX compiler identification is GNU 13.3.0
+#12 0.753 -- Detecting CXX compiler ABI info
+#12 0.835 -- Detecting CXX compiler ABI info - done
+#12 0.843 -- Check for working CXX compiler: /usr/bin/c++ - skipped
+#12 0.843 -- Detecting CXX compile features
+#12 0.844 -- Detecting CXX compile features - done
+#12 0.847 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+#12 0.928 -- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+#12 0.931 -- Found Threads: TRUE  
+#12 0.932 -- Configuring done (0.4s)
+#12 0.936 -- Generating done (0.0s)
+#12 0.940 -- Build files have been written to: /src/build
+#12 4.088 [1/7] Building CXX object CMakeFiles/core-test.dir/tests/core_test.cpp.o
+#12 4.226 [2/7] Linking CXX executable core-test
+#12 4.484 [3/7] Building CXX object CMakeFiles/fanin.dir/src/sink.cpp.o
+#12 4.614 [4/7] Building CXX object CMakeFiles/fanin.dir/src/main.cpp.o
+#12 4.899 [5/7] Building CXX object CMakeFiles/fanin.dir/src/producer.cpp.o
+#12 5.867 [6/7] Building CXX object CMakeFiles/fanin.dir/src/collector.cpp.o
+#12 5.938 [7/7] Linking CXX executable fanin
+#12 5.960 Internal ctest changing into directory: /src/build
+#12 5.961 Test project /src/build
+#12 5.962     Start 1: core
+#12 5.970 1/1 Test #1: core .............................   Passed    0.01 sec
+#12 5.971 
+#12 5.971 100% tests passed, 0 tests failed out of 1
+#12 5.971 
+#12 5.971 Total Test time (real) =   0.01 sec
+#12 DONE 6.0s
+
+#13 [runtime 2/4] RUN apt-get update && apt-get install -y --no-install-recommends     libstdc++6 libgcc-s1 && rm -rf /var/lib/apt/lists/*     && mkdir /results && chown 10001:10001 /results
+#13 CACHED
+
+#14 [runtime 3/4] COPY --from=build /src/build/fanin /usr/local/bin/fanin
+#14 DONE 0.0s
+
+#15 [runtime 4/4] WORKDIR /tmp
+#15 DONE 0.0s
+
+#16 [bench 1/3] RUN apt-get update && apt-get install -y --no-install-recommends     python3 && rm -rf /var/lib/apt/lists/*
+#16 0.573 Get:1 http://archive.ubuntu.com/ubuntu noble InRelease [256 kB]
+#16 0.586 Get:2 http://security.ubuntu.com/ubuntu noble-security InRelease [126 kB]
+#16 1.269 Get:3 http://security.ubuntu.com/ubuntu noble-security/restricted amd64 Packages [2132 kB]
+#16 1.343 Get:4 http://archive.ubuntu.com/ubuntu noble-updates InRelease [126 kB]
+#16 1.554 Get:5 http://archive.ubuntu.com/ubuntu noble-backports InRelease [126 kB]
+#16 1.737 Get:6 http://archive.ubuntu.com/ubuntu noble/restricted amd64 Packages [117 kB]
+#16 1.797 Get:7 http://archive.ubuntu.com/ubuntu noble/multiverse amd64 Packages [331 kB]
+#16 1.947 Get:8 http://archive.ubuntu.com/ubuntu noble/main amd64 Packages [1808 kB]
+#16 2.080 Get:9 http://security.ubuntu.com/ubuntu noble-security/main amd64 Packages [1424 kB]
+#16 2.161 Get:10 http://security.ubuntu.com/ubuntu noble-security/multiverse amd64 Packages [55.6 kB]
+#16 2.162 Get:11 http://security.ubuntu.com/ubuntu noble-security/universe amd64 Packages [1552 kB]
+#16 2.235 Get:12 http://archive.ubuntu.com/ubuntu noble/universe amd64 Packages [19.3 MB]
+#16 3.127 Get:13 http://archive.ubuntu.com/ubuntu noble-updates/restricted amd64 Packages [2240 kB]
+#16 3.218 Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 Packages [1742 kB]
+#16 3.279 Get:15 http://archive.ubuntu.com/ubuntu noble-updates/multiverse amd64 Packages [61.7 kB]
+#16 3.281 Get:16 http://archive.ubuntu.com/ubuntu noble-updates/universe amd64 Packages [2172 kB]
+#16 3.343 Get:17 http://archive.ubuntu.com/ubuntu noble-backports/multiverse amd64 Packages [669 B]
+#16 3.343 Get:18 http://archive.ubuntu.com/ubuntu noble-backports/main amd64 Packages [49.0 kB]
+#16 3.345 Get:19 http://archive.ubuntu.com/ubuntu noble-backports/universe amd64 Packages [36.0 kB]
+#16 4.178 Fetched 33.7 MB in 4s (8647 kB/s)
+#16 4.178 Reading package lists...
+#16 5.251 Reading package lists...
+#16 6.250 Building dependency tree...
+#16 6.492 Reading state information...
+#16 6.839 The following additional packages will be installed:
+#16 6.839   libexpat1 libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib
+#16 6.840   libreadline8t64 libsqlite3-0 media-types netbase python3-minimal python3.12
+#16 6.841   python3.12-minimal readline-common tzdata
+#16 6.843 Suggested packages:
+#16 6.843   python3-doc python3-tk python3-venv python3.12-venv python3.12-doc binutils
+#16 6.843   binfmt-support readline-doc
+#16 6.843 Recommended packages:
+#16 6.843   ca-certificates
+#16 6.922 The following NEW packages will be installed:
+#16 6.923   libexpat1 libpython3-stdlib libpython3.12-minimal libpython3.12-stdlib
+#16 6.927   libreadline8t64 libsqlite3-0 media-types netbase python3 python3-minimal
+#16 6.928   python3.12 python3.12-minimal readline-common tzdata
+#16 7.243 0 upgraded, 14 newly installed, 0 to remove and 11 not upgraded.
+#16 7.243 Need to get 7288 kB of archives.
+#16 7.243 After this operation, 28.0 MB of additional disk space will be used.
+#16 7.243 Get:1 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3.12-minimal amd64 3.12.3-1ubuntu0.17 [839 kB]
+#16 8.092 Get:2 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libexpat1 amd64 2.6.1-2ubuntu0.6 [98.9 kB]
+#16 8.115 Get:3 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3.12-minimal amd64 3.12.3-1ubuntu0.17 [2335 kB]
+#16 8.364 Get:4 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3-minimal amd64 3.12.3-0ubuntu2.1 [27.4 kB]
+#16 8.364 Get:5 http://archive.ubuntu.com/ubuntu noble/main amd64 media-types all 10.1.0 [27.5 kB]
+#16 8.365 Get:6 http://archive.ubuntu.com/ubuntu noble/main amd64 netbase all 6.4 [13.1 kB]
+#16 8.366 Get:7 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 tzdata all 2026e-0ubuntu0.24.04.1 [282 kB]
+#16 8.378 Get:8 http://archive.ubuntu.com/ubuntu noble/main amd64 readline-common all 8.2-4build1 [56.5 kB]
+#16 8.379 Get:9 http://archive.ubuntu.com/ubuntu noble/main amd64 libreadline8t64 amd64 8.2-4build1 [153 kB]
+#16 8.387 Get:10 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libsqlite3-0 amd64 3.45.1-1ubuntu2.9 [702 kB]
+#16 8.417 Get:11 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3.12-stdlib amd64 3.12.3-1ubuntu0.17 [2071 kB]
+#16 8.527 Get:12 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3.12 amd64 3.12.3-1ubuntu0.17 [651 kB]
+#16 8.552 Get:13 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 libpython3-stdlib amd64 3.12.3-0ubuntu2.1 [10.1 kB]
+#16 8.552 Get:14 http://archive.ubuntu.com/ubuntu noble-updates/main amd64 python3 amd64 3.12.3-0ubuntu2.1 [23.0 kB]
+#16 8.731 debconf: delaying package configuration, since apt-utils is not installed
+#16 8.774 Fetched 7288 kB in 2s (4589 kB/s)
+#16 8.813 Selecting previously unselected package libpython3.12-minimal:amd64.
+#16 8.813 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4381 files and directories currently installed.)
+#16 8.845 Preparing to unpack .../libpython3.12-minimal_3.12.3-1ubuntu0.17_amd64.deb ...
+#16 8.850 Unpacking libpython3.12-minimal:amd64 (3.12.3-1ubuntu0.17) ...
+#16 8.947 Selecting previously unselected package libexpat1:amd64.
+#16 8.948 Preparing to unpack .../libexpat1_2.6.1-2ubuntu0.6_amd64.deb ...
+#16 8.956 Unpacking libexpat1:amd64 (2.6.1-2ubuntu0.6) ...
+#16 8.992 Selecting previously unselected package python3.12-minimal.
+#16 8.993 Preparing to unpack .../python3.12-minimal_3.12.3-1ubuntu0.17_amd64.deb ...
+#16 9.004 Unpacking python3.12-minimal (3.12.3-1ubuntu0.17) ...
+#16 9.122 Setting up libpython3.12-minimal:amd64 (3.12.3-1ubuntu0.17) ...
+#16 9.142 Setting up libexpat1:amd64 (2.6.1-2ubuntu0.6) ...
+#16 9.153 Setting up python3.12-minimal (3.12.3-1ubuntu0.17) ...
+#16 10.08 Selecting previously unselected package python3-minimal.
+#16 10.08 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 4700 files and directories currently installed.)
+#16 10.09 Preparing to unpack .../0-python3-minimal_3.12.3-0ubuntu2.1_amd64.deb ...
+#16 10.09 Unpacking python3-minimal (3.12.3-0ubuntu2.1) ...
+#16 10.12 Selecting previously unselected package media-types.
+#16 10.13 Preparing to unpack .../1-media-types_10.1.0_all.deb ...
+#16 10.13 Unpacking media-types (10.1.0) ...
+#16 10.16 Selecting previously unselected package netbase.
+#16 10.16 Preparing to unpack .../2-netbase_6.4_all.deb ...
+#16 10.17 Unpacking netbase (6.4) ...
+#16 10.20 Selecting previously unselected package tzdata.
+#16 10.20 Preparing to unpack .../3-tzdata_2026e-0ubuntu0.24.04.1_all.deb ...
+#16 10.21 Unpacking tzdata (2026e-0ubuntu0.24.04.1) ...
+#16 10.28 Selecting previously unselected package readline-common.
+#16 10.29 Preparing to unpack .../4-readline-common_8.2-4build1_all.deb ...
+#16 10.29 Unpacking readline-common (8.2-4build1) ...
+#16 10.33 Selecting previously unselected package libreadline8t64:amd64.
+#16 10.33 Preparing to unpack .../5-libreadline8t64_8.2-4build1_amd64.deb ...
+#16 10.34 Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8 to /lib/x86_64-linux-gnu/libhistory.so.8.usr-is-merged by libreadline8t64'
+#16 10.34 Adding 'diversion of /lib/x86_64-linux-gnu/libhistory.so.8.2 to /lib/x86_64-linux-gnu/libhistory.so.8.2.usr-is-merged by libreadline8t64'
+#16 10.35 Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8 to /lib/x86_64-linux-gnu/libreadline.so.8.usr-is-merged by libreadline8t64'
+#16 10.36 Adding 'diversion of /lib/x86_64-linux-gnu/libreadline.so.8.2 to /lib/x86_64-linux-gnu/libreadline.so.8.2.usr-is-merged by libreadline8t64'
+#16 10.36 Unpacking libreadline8t64:amd64 (8.2-4build1) ...
+#16 10.40 Selecting previously unselected package libsqlite3-0:amd64.
+#16 10.40 Preparing to unpack .../6-libsqlite3-0_3.45.1-1ubuntu2.9_amd64.deb ...
+#16 10.41 Unpacking libsqlite3-0:amd64 (3.45.1-1ubuntu2.9) ...
+#16 10.45 Selecting previously unselected package libpython3.12-stdlib:amd64.
+#16 10.45 Preparing to unpack .../7-libpython3.12-stdlib_3.12.3-1ubuntu0.17_amd64.deb ...
+#16 10.45 Unpacking libpython3.12-stdlib:amd64 (3.12.3-1ubuntu0.17) ...
+#16 10.59 Selecting previously unselected package python3.12.
+#16 10.59 Preparing to unpack .../8-python3.12_3.12.3-1ubuntu0.17_amd64.deb ...
+#16 10.60 Unpacking python3.12 (3.12.3-1ubuntu0.17) ...
+#16 10.63 Selecting previously unselected package libpython3-stdlib:amd64.
+#16 10.63 Preparing to unpack .../9-libpython3-stdlib_3.12.3-0ubuntu2.1_amd64.deb ...
+#16 10.64 Unpacking libpython3-stdlib:amd64 (3.12.3-0ubuntu2.1) ...
+#16 10.67 Setting up python3-minimal (3.12.3-0ubuntu2.1) ...
+#16 10.84 Selecting previously unselected package python3.
+#16 10.84 (Reading database ... (Reading database ... 5%(Reading database ... 10%(Reading database ... 15%(Reading database ... 20%(Reading database ... 25%(Reading database ... 30%(Reading database ... 35%(Reading database ... 40%(Reading database ... 45%(Reading database ... 50%(Reading database ... 55%(Reading database ... 60%(Reading database ... 65%(Reading database ... 70%(Reading database ... 75%(Reading database ... 80%(Reading database ... 85%(Reading database ... 90%(Reading database ... 95%(Reading database ... 100%(Reading database ... 5706 files and directories currently installed.)
+#16 10.84 Preparing to unpack .../python3_3.12.3-0ubuntu2.1_amd64.deb ...
+#16 10.85 Unpacking python3 (3.12.3-0ubuntu2.1) ...
+#16 10.89 Setting up media-types (10.1.0) ...
+#16 10.90 Setting up libsqlite3-0:amd64 (3.45.1-1ubuntu2.9) ...
+#16 10.92 Setting up tzdata (2026e-0ubuntu0.24.04.1) ...
+#16 10.99 debconf: unable to initialize frontend: Dialog
+#16 10.99 debconf: (TERM is not set, so the dialog frontend is not usable.)
+#16 10.99 debconf: falling back to frontend: Readline
+#16 11.00 debconf: unable to initialize frontend: Readline
+#16 11.00 debconf: (Can't locate Term/ReadLine.pm in @INC (you may need to install the Term::ReadLine module) (@INC entries checked: /etc/perl /usr/local/lib/x86_64-linux-gnu/perl/5.38.2 /usr/local/share/perl/5.38.2 /usr/lib/x86_64-linux-gnu/perl5/5.38 /usr/share/perl5 /usr/lib/x86_64-linux-gnu/perl-base /usr/lib/x86_64-linux-gnu/perl/5.38 /usr/share/perl/5.38 /usr/local/lib/site_perl) at /usr/share/perl5/Debconf/FrontEnd/Readline.pm line 8.)
+#16 11.00 debconf: falling back to frontend: Teletype
+#16 11.03 Configuring tzdata
+#16 11.03 ------------------
+#16 11.03 
+#16 11.03 Please select the geographic area in which you live. Subsequent configuration
+#16 11.03 questions will narrow this down by presenting a list of cities, representing
+#16 11.03 the time zones in which they are located.
+#16 11.03 
+#16 11.03   1. Africa      4. Arctic    7. Australia  10. Pacific
+#16 11.03   2. America     5. Asia      8. Europe     11. Etc
+#16 11.03   3. Antarctica  6. Atlantic  9. Indian     12. Legacy
+#16 11.03 Geographic area: 
+#16 11.03 Use of uninitialized value $_[1] in join or string at /usr/share/perl5/Debconf/DbDriver/Stack.pm line 112.
+#16 11.04 
+#16 11.04 Current default time zone: '/UTC'
+#16 11.04 Local time is now:      Thu Nov  5 02:06:16 UTC 2026.
+#16 11.04 Universal Time is now:  Thu Nov  5 02:06:16 UTC 2026.
+#16 11.04 Run 'dpkg-reconfigure tzdata' if you wish to change it.
+#16 11.04 
+#16 11.04 Use of uninitialized value $val in substitution (s///) at /usr/share/perl5/Debconf/Format/822.pm line 84, <GEN6> line 4.
+#16 11.04 Use of uninitialized value $val in concatenation (.) or string at /usr/share/perl5/Debconf/Format/822.pm line 85, <GEN6> line 4.
+#16 11.06 Setting up netbase (6.4) ...
+#16 11.09 Setting up readline-common (8.2-4build1) ...
+#16 11.10 Setting up libreadline8t64:amd64 (8.2-4build1) ...
+#16 11.12 Setting up libpython3.12-stdlib:amd64 (3.12.3-1ubuntu0.17) ...
+#16 11.13 Setting up python3.12 (3.12.3-1ubuntu0.17) ...
+#16 12.20 Setting up libpython3-stdlib:amd64 (3.12.3-0ubuntu2.1) ...
+#16 12.21 Setting up python3 (3.12.3-0ubuntu2.1) ...
+#16 12.22 running python rtupdate hooks for python3.12...
+#16 12.22 running python post-rtupdate hooks for python3.12...
+#16 12.30 Processing triggers for libc-bin (2.39-0ubuntu8.9) ...
+#16 DONE 12.5s
+
+#17 [bench 2/3] COPY scripts /lab/scripts
+#17 DONE 0.1s
+
+#18 [bench 3/3] RUN mkdir -p /results && chown 10001:10001 /results
+#18 DONE 0.2s
+
+#19 exporting to image
+#19 exporting layers
+#19 exporting layers 2.1s done
+#19 exporting manifest sha256:5b42176c45cb929fe3b9b6acdc2e53c8c114530300e9ed884311ac6f64f1e0c1 0.0s done
+#19 exporting config sha256:6948473813339c15dc6e724e9236bb97b419b761afd9ac0f82bbb91edd6f19c7 0.0s done
+#19 exporting attestation manifest sha256:c5f0a82cde33d4caaf7d7cecbf465c33e87cecce05b133aeb71c595c05d5b054 0.0s done
+#19 exporting manifest list sha256:715886aabb9b466e3185cdf24f1c465c73d2199220a935b9ef570c0dc063c9ce 0.0s done
+#19 naming to docker.io/library/fanin-lab-cpp:qa
+#19 naming to docker.io/library/fanin-lab-cpp:qa done
+#19 unpacking to docker.io/library/fanin-lab-cpp:qa
+#19 unpacking to docker.io/library/fanin-lab-cpp:qa 1.0s done
+#19 DONE 3.2s

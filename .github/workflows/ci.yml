@@ -1,0 +1,19 @@
+name: native-checks
+on: [push, pull_request]
+jobs:
+  test:
+    runs-on: ubuntu-24.04
+    env:
+      FANIN_FAILURE_DIR: ${{ runner.temp }}/fanin-failures
+    steps:
+      - uses: actions/checkout@v4
+      - run: make test
+      - run: make sanitize
+      - run: setarch "$(uname -m)" -R make tsan
+      - run: docker build --target runtime -t prento:test .
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: process-test-failure-diagnostics
+          path: ${{ runner.temp }}/fanin-failures
+          if-no-files-found: ignore

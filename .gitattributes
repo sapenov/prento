@@ -1,0 +1,5 @@
+# Preserve source and measured evidence bytes on every checkout platform.
+* -text
+# Raw reports and console logs retain their original line endings/formatting.
+results/** -whitespace
+qa/logs/** -whitespace

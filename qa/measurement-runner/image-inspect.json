@@ -1,0 +1,70 @@
+[
+    {
+        "Id": "sha256:715886aabb9b466e3185cdf24f1c465c73d2199220a935b9ef570c0dc063c9ce",
+        "RepoTags": [
+            "fanin-lab-cpp:qa"
+        ],
+        "RepoDigests": [
+            "fanin-lab-cpp@sha256:715886aabb9b466e3185cdf24f1c465c73d2199220a935b9ef570c0dc063c9ce"
+        ],
+        "Comment": "buildkit.dockerfile.v0",
+        "Created": "2026-11-05T02:06:18.314814406Z",
+        "Config": {
+            "User": "10001:10001",
+            "ExposedPorts": {
+                "9000/tcp": {},
+                "9001/tcp": {},
+                "9090/tcp": {}
+            },
+            "Env": [
+                "PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin"
+            ],
+            "Entrypoint": [
+                "python3",
+                "/lab/scripts/bench.py",
+                "--binary",
+                "/usr/local/bin/fanin"
+            ],
+            "Cmd": [
+                "--output",
+                "/results/run"
+            ],
+            "WorkingDir": "/tmp",
+            "Labels": {
+                "org.opencontainers.image.version": "24.04"
+            },
+            "ArgsEscaped": true
+        },
+        "Architecture": "amd64",
+        "Os": "linux",
+        "Size": 174549331,
+        "RootFS": {
+            "Type": "layers",
+            "Layers": [
+                "sha256:65e5d715ea720349e6475f91651a0956279fc295a45fd73aa04f1cec046281a1",
+                "sha256:4bef5c0b7358d1ce1835f1503fb6e1541f3886451fa3f35e521af2963ac45507",
+                "sha256:0493f6ae33bf3daf4dabc661ddf2f29b1ad64af32671d3916e598153261f1fde",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef",
+                "sha256:5c85513f24fe6b57419f684a01a76f6efe45e064086a669a656e39108570fb5e",
+                "sha256:68419bbafd3ec16b468bf4e71d33bae04a6e09d1d640cce2783fdb0388c8f948",
+                "sha256:5f70bf18a086007016e948b04aed3b82103a36bea41755b6cddfaf10ace3c6ef"
+            ]
+        },
+        "Metadata": {
+            "LastTagTime": "2026-11-05T02:06:20.528843941Z"
+        },
+        "Descriptor": {
+            "mediaType": "application/vnd.oci.image.index.v1+json",
+            "digest": "sha256:715886aabb9b466e3185cdf24f1c465c73d2199220a935b9ef570c0dc063c9ce",
+            "size": 856
+        },
+        "Identity": {
+            "Build": [
+                {
+                    "Ref": "khiq180i7dw6zpv63o498za7x",
+                    "CreatedAt": "2026-11-05T02:06:21.489723849Z"
+                }
+            ]
+        }
+    }
+]

@@ -1,0 +1,60 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.56kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 87B 0.0s done
+#3 DONE 0.0s
+
+#4 [build 1/8] FROM docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9
+#4 resolve docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 533B 0.1s done
+#5 DONE 0.1s
+
+#6 [runtime 2/4] RUN apt-get update && apt-get install -y --no-install-recommends     libstdc++6 libgcc-s1 && rm -rf /var/lib/apt/lists/*     && mkdir /results && chown 10001:10001 /results
+#6 CACHED
+
+#7 [build 3/8] WORKDIR /src
+#7 CACHED
+
+#8 [build 5/8] COPY include ./include
+#8 CACHED
+
+#9 [build 6/8] COPY src ./src
+#9 CACHED
+
+#10 [build 4/8] COPY CMakeLists.txt ./
+#10 CACHED
+
+#11 [build 7/8] COPY tests/core_test.cpp ./tests/core_test.cpp
+#11 CACHED
+
+#12 [build 8/8] RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release     && cmake --build build && ctest --test-dir build --output-on-failure
+#12 CACHED
+
+#13 [build 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     g++ cmake ninja-build ca-certificates && rm -rf /var/lib/apt/lists/*
+#13 CACHED
+
+#14 [runtime 3/4] COPY --from=build /src/build/fanin /usr/local/bin/fanin
+#14 CACHED
+
+#15 [runtime 4/4] WORKDIR /tmp
+#15 CACHED
+
+#16 exporting to image
+#16 exporting layers done
+#16 exporting manifest sha256:d91c3f9c544a1cb437277c8e0bbcc96dc443afdeb8dfa01cde7f10ea4d16ee47 0.0s done
+#16 exporting config sha256:260d8682fe536ff9fe5f0a06f1bb22adb7a749a310cbb9ba0bf50e2fda7d827f 0.0s done
+#16 exporting attestation manifest sha256:711d2b0be7ea5f57ef61391e7490e33132a65ee3065ce6291dd903b8cd4a103f 0.0s done
+#16 exporting manifest list sha256:b694d44c93ff79febf0f5d079061864c3e8ef8f01f81de2e21c19fe2e982f0e2 0.0s done
+#16 naming to docker.io/library/fanin-lab-cpp:local done
+#16 unpacking to docker.io/library/fanin-lab-cpp:local done
+#16 DONE 0.1s

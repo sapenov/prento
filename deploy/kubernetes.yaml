@@ -1,0 +1,104 @@
+# Illustrative in-cluster deployment. Replace image with your registry digest.
+# No Kubernetes execution or multi-node scaling is implied by this file.
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fanin-collector
+spec:
+  replicas: 2
+  selector:
+    matchLabels: {app: fanin-collector}
+  template:
+    metadata:
+      labels: {app: fanin-collector}
+    spec:
+      terminationGracePeriodSeconds: 15
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: collector
+          image: prento:local
+          args: [collector, --bind, 0.0.0.0, --sink, "fanin-sink:9001", --admission, credit, --policy, priority]
+          ports:
+            - {name: ingest, containerPort: 9000}
+            - {name: metrics, containerPort: 9090}
+          resources:
+            requests: {cpu: 250m, memory: 64Mi}
+            limits: {cpu: "1", memory: 256Mi}
+          readinessProbe:
+            httpGet: {path: /readyz, port: metrics}
+            periodSeconds: 2
+          livenessProbe:
+            httpGet: {path: /livez, port: metrics}
+            periodSeconds: 10
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: fanin-collector}
+spec:
+  selector: {app: fanin-collector}
+  ports:
+    - {name: ingest, port: 9000, targetPort: ingest}
+    - {name: metrics, port: 9090, targetPort: metrics}
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata: {name: fanin-sink}
+spec:
+  replicas: 1
+  selector:
+    matchLabels: {app: fanin-sink}
+  template:
+    metadata:
+      labels: {app: fanin-sink}
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile: {type: RuntimeDefault}
+      containers:
+        - name: sink
+          image: prento:local
+          args: [sink, --bind, 0.0.0.0, --bytes-per-sec, "4194304"]
+          ports: [{containerPort: 9001}]
+          resources:
+            requests: {cpu: 250m, memory: 64Mi}
+            limits: {cpu: "1", memory: 256Mi}
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities: {drop: [ALL]}
+---
+apiVersion: v1
+kind: Service
+metadata: {name: fanin-sink}
+spec:
+  selector: {app: fanin-sink}
+  ports: [{port: 9001, targetPort: 9001}]
+---
+apiVersion: batch/v1
+kind: Job
+metadata: {name: fanin-producers}
+spec:
+  parallelism: 4
+  completions: 4
+  backoffLimit: 0
+  template:
+    spec:
+      restartPolicy: Never
+      securityContext: {runAsNonRoot: true, runAsUser: 10001, runAsGroup: 10001, fsGroup: 10001}
+      containers:
+        - name: producer
+          image: prento:local
+          args: [producer, --target, "fanin-collector:9000", --admission, credit, --duration-ms, "10000", --rate, "100", --producers, "8", --output, /results/outcomes.csv]
+          resources:
+            requests: {cpu: 100m, memory: 32Mi}
+            limits: {cpu: "1", memory: 128Mi}
+          volumeMounts: [{name: results, mountPath: /results}]
+      volumes: [{name: results, emptyDir: {}}]

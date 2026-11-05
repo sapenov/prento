@@ -1,0 +1,63 @@
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.56kB 0.0s done
+#1 DONE 0.0s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 0.1s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 87B 0.0s done
+#3 DONE 0.0s
+
+#4 [build 1/8] FROM docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9
+#4 resolve docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9 0.0s done
+#4 DONE 0.0s
+
+#5 [internal] load build context
+#5 transferring context: 47.13kB 0.1s done
+#5 DONE 0.1s
+
+#6 [build 6/8] COPY src ./src
+#6 CACHED
+
+#7 [build 8/8] RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release     && cmake --build build && ctest --test-dir build --output-on-failure
+#7 CACHED
+
+#8 [build 4/8] COPY CMakeLists.txt ./
+#8 CACHED
+
+#9 [build 7/8] COPY tests/core_test.cpp ./tests/core_test.cpp
+#9 CACHED
+
+#10 [build 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     g++ cmake ninja-build ca-certificates && rm -rf /var/lib/apt/lists/*
+#10 CACHED
+
+#11 [build 3/8] WORKDIR /src
+#11 CACHED
+
+#12 [build 5/8] COPY include ./include
+#12 CACHED
+
+#13 [qa 1/4] RUN apt-get update && apt-get install -y --no-install-recommends     make python3 util-linux && rm -rf /var/lib/apt/lists/*
+#13 CACHED
+
+#14 [qa 2/4] COPY Makefile ./
+#14 DONE 0.0s
+
+#15 [qa 3/4] COPY tests ./tests
+#15 DONE 0.0s
+
+#16 [qa 4/4] COPY scripts ./scripts
+#16 DONE 0.0s
+
+#17 exporting to image
+#17 exporting layers 0.1s done
+#17 exporting manifest sha256:777cd8c82d61902ebc50908fcbfa763b2e6a0e54d51ec6ffe4c2260f6f4f531b 0.0s done
+#17 exporting config sha256:c201c357844d132ebaad408d47f5f5b173f993cd87d1f7683b06dd89486cbc7b 0.0s done
+#17 exporting attestation manifest sha256:67bae5164a299f862529ac6b2df34d147bbe34c6ffeecacb18465020f43abd03 0.0s done
+#17 exporting manifest list sha256:01bfd8b60501848a212a838453b4c3eb397ae535c7e7b59154182ba93c5d8845 0.0s done
+#17 naming to docker.io/library/fanin-lab-cpp:qa-tools done
+#17 unpacking to docker.io/library/fanin-lab-cpp:qa-tools 0.1s done
+#17 DONE 0.3s

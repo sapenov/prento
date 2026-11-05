@@ -1,0 +1,514 @@
+[
+  {
+    "scenario": "burst",
+    "mode": "credit/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 342,
+        "completed": 342,
+        "mean_ms": 837.2703709320261,
+        "mean_pre_send_ms": 743.9786858263824,
+        "mean_post_send_ms": 93.29168510564374,
+        "max_ms": 1649.547801,
+        "seed_mean_min_ms": 785.2278742666666,
+        "seed_mean_max_ms": 864.0413785294118
+      },
+      "bulk": {
+        "generated": 5967,
+        "completed": 5967,
+        "mean_ms": 806.7432905455753,
+        "mean_pre_send_ms": 700.7018342813889,
+        "mean_post_send_ms": 106.04145626418648,
+        "max_ms": 1677.271977,
+        "seed_mean_min_ms": 785.484645562062,
+        "seed_mean_max_ms": 833.9381467291354
+      }
+    }
+  },
+  {
+    "scenario": "burst",
+    "mode": "credit/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 342,
+        "completed": 342,
+        "mean_ms": 779.5457797819795,
+        "mean_pre_send_ms": 767.2015947025728,
+        "mean_post_send_ms": 12.344185079406577,
+        "max_ms": 1671.067143,
+        "seed_mean_min_ms": 724.3032405333333,
+        "seed_mean_max_ms": 873.8203897745099
+      },
+      "bulk": {
+        "generated": 5967,
+        "completed": 5967,
+        "mean_ms": 838.138843385986,
+        "mean_pre_send_ms": 726.7182703178685,
+        "mean_post_send_ms": 111.42057306811749,
+        "max_ms": 1811.113213,
+        "seed_mean_min_ms": 776.2378232215447,
+        "seed_mean_max_ms": 899.7933760154923
+      }
+    }
+  },
+  {
+    "scenario": "burst",
+    "mode": "push/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 342,
+        "completed": 342,
+        "mean_ms": 825.5109468527752,
+        "mean_pre_send_ms": 733.1308235121486,
+        "mean_post_send_ms": 92.38012334062662,
+        "max_ms": 1622.299955,
+        "seed_mean_min_ms": 808.5862852761906,
+        "seed_mean_max_ms": 854.759384245098
+      },
+      "bulk": {
+        "generated": 5967,
+        "completed": 5967,
+        "mean_ms": 795.3048080148715,
+        "mean_pre_send_ms": 689.8180064626325,
+        "mean_post_send_ms": 105.48680155223893,
+        "max_ms": 1647.401569,
+        "seed_mean_min_ms": 755.6897376361788,
+        "seed_mean_max_ms": 821.9020903153423
+      }
+    }
+  },
+  {
+    "scenario": "burst",
+    "mode": "push/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 342,
+        "completed": 342,
+        "mean_ms": 739.6521584309264,
+        "mean_pre_send_ms": 729.8624507850503,
+        "mean_post_send_ms": 9.789707645876128,
+        "max_ms": 1649.061568,
+        "seed_mean_min_ms": 684.1269707037037,
+        "seed_mean_max_ms": 797.495461617647
+      },
+      "bulk": {
+        "generated": 5967,
+        "completed": 5967,
+        "mean_ms": 802.8740436865428,
+        "mean_pre_send_ms": 693.9143177982717,
+        "mean_post_send_ms": 108.95972588827107,
+        "max_ms": 1886.66355,
+        "seed_mean_min_ms": 736.2768941864837,
+        "seed_mean_max_ms": 840.3168913873874
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "mode": "credit/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 991.4156138955556,
+        "mean_pre_send_ms": 861.2025351181145,
+        "mean_post_send_ms": 130.21307877744107,
+        "max_ms": 1509.469025,
+        "seed_mean_min_ms": 807.7789975606061,
+        "seed_mean_max_ms": 1139.5745598533333
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 906.5493936369003,
+        "mean_pre_send_ms": 759.8362710182771,
+        "mean_post_send_ms": 146.71312261862323,
+        "max_ms": 1515.462747,
+        "seed_mean_min_ms": 892.4202478479657,
+        "seed_mean_max_ms": 917.7645656624561
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "mode": "credit/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 892.9242548407408,
+        "mean_pre_send_ms": 842.7475318071381,
+        "mean_post_send_ms": 50.17672303360269,
+        "max_ms": 1467.160397,
+        "seed_mean_min_ms": 760.4777768030303,
+        "seed_mean_max_ms": 996.7300494666666
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 891.0404747254499,
+        "mean_pre_send_ms": 742.9660834483142,
+        "mean_post_send_ms": 148.07439127713576,
+        "max_ms": 1516.334367,
+        "seed_mean_min_ms": 876.0741798792982,
+        "seed_mean_max_ms": 912.7331944191073
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "mode": "push/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 959.8135888482828,
+        "mean_pre_send_ms": 832.1797029009427,
+        "mean_post_send_ms": 127.63388594734006,
+        "max_ms": 1502.48085,
+        "seed_mean_min_ms": 809.3909034696969,
+        "seed_mean_max_ms": 1094.1562312266667
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 877.9007683832893,
+        "mean_pre_send_ms": 734.3058224363203,
+        "mean_post_send_ms": 143.594945946969,
+        "max_ms": 1517.745225,
+        "seed_mean_min_ms": 847.415365665239,
+        "seed_mean_max_ms": 912.0109639337518
+      }
+    }
+  },
+  {
+    "scenario": "outage",
+    "mode": "push/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 911.9476742657239,
+        "mean_pre_send_ms": 864.0449153199327,
+        "mean_post_send_ms": 47.90275894579124,
+        "max_ms": 1458.547186,
+        "seed_mean_min_ms": 817.6162837272727,
+        "seed_mean_max_ms": 992.7863394133333
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 913.4270738724338,
+        "mean_pre_send_ms": 764.0211702279646,
+        "mean_post_send_ms": 149.40590364446908,
+        "max_ms": 1552.5246,
+        "seed_mean_min_ms": 877.5103859578948,
+        "seed_mean_max_ms": 975.6504243082287
+      }
+    }
+  },
+  {
+    "scenario": "slow",
+    "mode": "credit/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 802.8511826042425,
+        "mean_pre_send_ms": 687.055342836229,
+        "mean_post_send_ms": 115.79583976801347,
+        "max_ms": 1331.544564,
+        "seed_mean_min_ms": 709.8533837121213,
+        "seed_mean_max_ms": 855.2020097272728
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 735.3106933972521,
+        "mean_pre_send_ms": 595.8291312420812,
+        "mean_post_send_ms": 139.48156215517085,
+        "max_ms": 1353.605705,
+        "seed_mean_min_ms": 708.9581615705263,
+        "seed_mean_max_ms": 775.4399397168759
+      }
+    }
+  },
+  {
+    "scenario": "slow",
+    "mode": "credit/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 747.0988546032996,
+        "mean_pre_send_ms": 727.8865009315151,
+        "mean_post_send_ms": 19.212353671784513,
+        "max_ms": 1230.252195,
+        "seed_mean_min_ms": 655.7604566818181,
+        "seed_mean_max_ms": 793.7101609866667
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 777.236437653622,
+        "mean_pre_send_ms": 631.7068227977968,
+        "mean_post_send_ms": 145.52961485582514,
+        "max_ms": 1364.483489,
+        "seed_mean_min_ms": 751.5206817494646,
+        "seed_mean_max_ms": 800.2422444610526
+      }
+    }
+  },
+  {
+    "scenario": "slow",
+    "mode": "push/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 833.048302272862,
+        "mean_pre_send_ms": 716.8769150954882,
+        "mean_post_send_ms": 116.17138717737375,
+        "max_ms": 1347.116026,
+        "seed_mean_min_ms": 722.0919088181818,
+        "seed_mean_max_ms": 898.4161920404041
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 762.0627077488265,
+        "mean_pre_send_ms": 620.6363554096629,
+        "mean_post_send_ms": 141.42635233916351,
+        "max_ms": 1360.328741,
+        "seed_mean_min_ms": 739.3343362252632,
+        "seed_mean_max_ms": 788.3335266750348
+      }
+    }
+  },
+  {
+    "scenario": "slow",
+    "mode": "push/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 722.1547538988552,
+        "mean_pre_send_ms": 708.0969223579125,
+        "mean_post_send_ms": 14.057831540942761,
+        "max_ms": 1207.133131,
+        "seed_mean_min_ms": 666.4672406363636,
+        "seed_mean_max_ms": 792.0922096868687
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 752.7119437834305,
+        "mean_pre_send_ms": 608.0714029304313,
+        "mean_post_send_ms": 144.6405408529991,
+        "max_ms": 1357.832451,
+        "seed_mean_min_ms": 713.2074035642105,
+        "seed_mean_max_ms": 789.4338973242677
+      }
+    }
+  },
+  {
+    "scenario": "steady",
+    "mode": "credit/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 1.202464835959596,
+        "mean_pre_send_ms": 0.29056430835016833,
+        "mean_post_send_ms": 0.9119005276094276,
+        "max_ms": 3.179399,
+        "seed_mean_min_ms": 1.1823882424242425,
+        "seed_mean_max_ms": 1.2193183866666668
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 9.233731121753406,
+        "mean_pre_send_ms": 0.3613082235463401,
+        "mean_post_send_ms": 8.872422898207065,
+        "max_ms": 26.749033,
+        "seed_mean_min_ms": 9.08111490149893,
+        "seed_mean_max_ms": 9.321515237796374
+      }
+    }
+  },
+  {
+    "scenario": "steady",
+    "mode": "credit/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 1.2823709911111112,
+        "mean_pre_send_ms": 0.32154193851851853,
+        "mean_post_send_ms": 0.9608290525925927,
+        "max_ms": 3.134719,
+        "seed_mean_min_ms": 1.06703164,
+        "seed_mean_max_ms": 1.4884711515151514
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 9.332918109876694,
+        "mean_pre_send_ms": 0.38499911259362407,
+        "mean_post_send_ms": 8.94791899728307,
+        "max_ms": 14.235249,
+        "seed_mean_min_ms": 9.112496249824561,
+        "seed_mean_max_ms": 9.47876149821556
+      }
+    }
+  },
+  {
+    "scenario": "steady",
+    "mode": "push/fifo",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 1.0486346834343434,
+        "mean_pre_send_ms": 0.304766114006734,
+        "mean_post_send_ms": 0.7438685694276094,
+        "max_ms": 2.672904,
+        "seed_mean_min_ms": 0.933568696969697,
+        "seed_mean_max_ms": 1.1844258533333334
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 9.09269040951359,
+        "mean_pre_send_ms": 0.36432194262947426,
+        "mean_post_send_ms": 8.728368466884117,
+        "max_ms": 17.786737,
+        "seed_mean_min_ms": 8.919064892219843,
+        "seed_mean_max_ms": 9.34435036491228
+      }
+    }
+  },
+  {
+    "scenario": "steady",
+    "mode": "push/priority",
+    "runs": 9,
+    "seeds": [
+      7,
+      42,
+      2026
+    ],
+    "classes": {
+      "critical": {
+        "generated": 240,
+        "completed": 240,
+        "mean_ms": 0.9509084597979798,
+        "mean_pre_send_ms": 0.28232419286195287,
+        "mean_post_send_ms": 0.6685842669360269,
+        "max_ms": 3.274731,
+        "seed_mean_min_ms": 0.8979823636363636,
+        "seed_mean_max_ms": 1.0509679090909092
+      },
+      "bulk": {
+        "generated": 4260,
+        "completed": 4260,
+        "mean_ms": 9.069942994123277,
+        "mean_pre_send_ms": 0.3574166006476378,
+        "mean_post_send_ms": 8.71252639347564,
+        "max_ms": 23.400297,
+        "seed_mean_min_ms": 8.99789310669456,
+        "seed_mean_max_ms": 9.211794159885796
+      }
+    }
+  }
+]

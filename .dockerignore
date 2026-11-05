@@ -1,0 +1,8 @@
+.git
+build
+results
+**/__pycache__
+.superpowers
+dist
+qa-local
+qa-private

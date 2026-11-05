@@ -1,0 +1,65 @@
+{
+  "generated": 421,
+  "generated_bytes": 13210112,
+  "completed": 421,
+  "completed_bytes": 13210112,
+  "failed_unknown": 0,
+  "failed_unknown_bytes": 0,
+  "producer_drop": 0,
+  "producer_drop_bytes": 0,
+  "classes": {
+    "critical": {
+      "generated": 18,
+      "completed": 18,
+      "completion_fraction": 1.0,
+      "mean_ms": 474.83356305555554,
+      "p50_ms": 352.262709,
+      "p99_ms": 1030.924704,
+      "p999_ms": 1030.924704,
+      "producer_wait_p99_ms": 1009.795267
+    },
+    "bulk": {
+      "generated": 403,
+      "completed": 403,
+      "completion_fraction": 1.0,
+      "mean_ms": 612.410103719603,
+      "p50_ms": 684.34643,
+      "p99_ms": 1156.141235,
+      "p999_ms": 1161.586104,
+      "producer_wait_p99_ms": 1001.804527
+    }
+  },
+  "offered_bytes_per_sec": 4403370.666666667,
+  "completion_bytes_per_sec_during_offer": 3288917.3333333335,
+  "drain_ms": 974.847767,
+  "scenario": "burst",
+  "admission": "push",
+  "policy": "priority",
+  "repeat": 1,
+  "measurements": {
+    "collector_peak_rss_kib": 5072,
+    "producer_peak_rss_kib": 5192,
+    "sink_peak_rss_kib": 4328,
+    "sink_sampled_cpu_seconds": 0.12,
+    "collector_sampled_cpu_seconds": 0.71,
+    "producer_sampled_cpu_seconds": 0.09,
+    "collector_final_counters": {
+      "fanin_reserved_bytes": 0,
+      "fanin_reserved_peak_bytes": 262144,
+      "fanin_buffer_limit_bytes": 262144,
+      "fanin_admitted_total": 421,
+      "fanin_admitted_bytes_total": 13210112,
+      "fanin_completed_total": 421,
+      "fanin_failed_total": 0,
+      "fanin_waiting_announcements": 0,
+      "fanin_ready_batches": 0
+    }
+  },
+  "producer_summary": {
+    "generated": 421,
+    "completed": 421,
+    "failed_unknown": 0,
+    "producer_drop": 0,
+    "sum_per_producer_peak_queued_bytes": 3409408
+  }
+}

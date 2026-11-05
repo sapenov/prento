@@ -1,0 +1,29 @@
+./build/core-test
+core: 18 checks passed
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+test_schedule_covers_each_combination_and_repeats_order (test_bench.BenchTest.test_schedule_covers_each_combination_and_repeats_order) ... ok
+test_seed_parser_rejects_ambiguous_and_invalid_inputs (test_bench.BenchTest.test_seed_parser_rejects_ambiguous_and_invalid_inputs) ... ok
+test_archive_manifest_detects_changed_files (test_bundle.BundleTest.test_archive_manifest_detects_changed_files) ... ok
+test_bundle_rejects_escape_and_symlinks (test_bundle.BundleTest.test_bundle_rejects_escape_and_symlinks) ... ok
+test_all_four_modes_complete_and_respect_budget (test_network.NetworkTest.test_all_four_modes_complete_and_respect_budget) ... ok
+test_corrupt_body_never_gets_success_ack (test_network.NetworkTest.test_corrupt_body_never_gets_success_ack) ... ok
+test_idle_sink_connection_can_be_reused (test_network.NetworkTest.test_idle_sink_connection_can_be_reused) ... ok
+test_invalid_options_fail (test_network.NetworkTest.test_invalid_options_fail) ... ok
+test_low_rate_producers_keep_idle_connections (test_network.NetworkTest.test_low_rate_producers_keep_idle_connections) ... ok
+test_overload_accounts_for_every_generated_item (test_network.NetworkTest.test_overload_accounts_for_every_generated_item) ... ok
+test_oversized_header_is_rejected_without_body (test_network.NetworkTest.test_oversized_header_is_rejected_without_body) ... ok
+test_producer_termination_interrupts_scheduled_wait (test_network.NetworkTest.test_producer_termination_interrupts_scheduled_wait) ... ok
+test_sink_loss_produces_explicit_unknown_outcomes (test_network.NetworkTest.test_sink_loss_produces_explicit_unknown_outcomes) ... ok
+test_stalled_body_releases_reservation (test_network.NetworkTest.test_stalled_body_releases_reservation) ... ok
+test_impossible_completed_timestamps_are_rejected (test_report.ReportTest.test_impossible_completed_timestamps_are_rejected) ... ok
+test_matching_modes_require_same_experiment_and_binary (test_report.ReportTest.test_matching_modes_require_same_experiment_and_binary) ... ok
+test_paired_comparison_validates_inputs_and_preserves_failures (test_report.ReportTest.test_paired_comparison_validates_inputs_and_preserves_failures) ... ok
+test_report_includes_losses_and_uses_nearest_rank (test_report.ReportTest.test_report_includes_losses_and_uses_nearest_rank) ... ok
+test_credit_is_withheld_while_full_then_resumes_after_completion (test_scheduling.SchedulingTest.test_credit_is_withheld_while_full_then_resumes_after_completion) ... ok
+test_fifo_preserves_order_in_both_admission_modes (test_scheduling.SchedulingTest.test_fifo_preserves_order_in_both_admission_modes) ... ok
+test_later_critical_overtakes_earlier_bulk_in_both_admission_modes (test_scheduling.SchedulingTest.test_later_critical_overtakes_earlier_bulk_in_both_admission_modes) ... ok
+
+----------------------------------------------------------------------
+Ran 21 tests in 10.072s
+
+OK
