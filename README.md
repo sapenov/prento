@@ -2,13 +2,15 @@
 
 **Timely telemetry under load.**
 
-C++20 · Linux / TCP · Docker / OCI · Automated tests and CI
+C++20 · Linux / TCP · Docker / OCI
 
 [![CI](https://github.com/sapenov/prento/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/sapenov/prento/actions/workflows/ci.yml)
 
-When a telemetry backend slows down, time-sensitive events can wait behind routine bulk data. Prento is a C++20 performance testbed for evaluating how scheduling and admission control affect that delay.
+When a telemetry pipeline backs up, critical failure signals arrive late—leaving engineers to diagnose a live incident with an incomplete picture.
 
-Across **144 Docker benchmark trials** and three workload seeds, priority-aware push reduced mean critical end-to-end latency by **10.4% during bursts** and **13.3% with a slow sink**, compared with FIFO push. All **79,236 synthetic messages completed after drain**, with no drops or unknown outcomes.
+Prento investigates how to get critical telemetry through sooner when ingestion is under pressure.
+
+**Measured result:** priority-aware push cut mean critical end-to-end latency by **10.4% during bursts** and **13.3% with a slow sink**, versus FIFO push. Across **144 Docker trials**, all **79,236 synthetic messages completed after drain**, with no drops or unknown outcomes.
 
 [View results](#results) · [Run the experiment](#quickstart) · [Explore the architecture](#architecture)
 
@@ -16,37 +18,37 @@ Across **144 Docker benchmark trials** and three workload seeds, priority-aware 
 
 ![Mean critical end-to-end latency: burst 825.51 to 739.65 ms, a 10.4% reduction; slow sink 833.05 to 722.15 ms, a 13.3% reduction. Push/FIFO versus push/priority.](docs/images/results.svg)
 
-The chart highlights two stressed workloads. Each value averages nine runs equally: three seeds × three timing repeats. Seed ranges describe variation, not confidence intervals. [All four scenarios, bulk costs and observed maxima](results/2026-11-04-qa/INTERPRETATION.md) accompany the [complete report](results/2026-11-04-qa/REPORT.md).
+Each bar averages nine runs equally: three workload seeds × three timing repeats. The seed ranges show variation, not confidence intervals. [Compare all four scenarios, bulk costs and observed maxima](results/2026-11-04-qa/INTERPRETATION.md), or inspect the [complete report](results/2026-11-04-qa/REPORT.md).
 
-**Measurement scope:** five-second offered-load windows plus drain; four CPUs and 1 GiB per container on a shared laptop. Each trial contains only 22–45 critical messages, so the results describe means and observed maxima rather than a production tail SLO. Completion acknowledges simulated sink processing.
+Five-second offered-load windows plus drain; four CPUs and 1 GiB per container on a shared laptop. Runs contain 22–45 critical messages: these samples support descriptive mean comparisons, not a production tail SLO.
 
 ## Engineering findings
 
-- **Priority helped in the tested burst and slow-sink workloads.** Mean latency fell while some individual messages took longer; burst bulk mean latency increased 0.95%. The comparison keeps admission, workload and resource limits fixed.
-- **Receiver credits offered no consistent additional benefit beyond priority-aware push.** The experiment makes their coordination cost and workload dependence visible, supporting the simpler policy for this workload.
-- **The next bottleneck is upstream of transmission.** With priority-aware push, pre-send time accounts for 98.7% of critical mean latency in bursts and 98.1% with a slow sink. It includes producer FIFO waiting, scheduling lateness and preparation; finer instrumentation is needed to isolate each cause.
-
-These findings guide the next experiment: measure producer stages and test source-local priority under the same queue and resource budgets. [Options and effort estimates](docs/PRODUCER_LATENCY.md).
+- **Use priority-aware push as the default for this workload.** Credits added coordination without a consistent end-to-end latency gain.
+- **Measure the cost to other traffic.** Burst bulk mean latency rose 0.95%, and some critical messages took longer despite the lower mean.
+- **Most remaining delay happens before transmission.** With priority-aware push, pre-send time accounts for 98.7% of critical mean latency in bursts and 98.1% with a slow sink. This interval includes producer FIFO waiting, scheduling lateness, preparation and connection setup.
 
 ## Quickstart
 
-Requirements: Docker Engine/Desktop with Linux containers and Docker Compose. The image supplies the compiler and Python; the first build needs package-repository access unless cached.
+Run the full comparison with Docker Engine/Desktop (Linux containers) and Docker Compose. The image supplies the toolchain; the first build needs package-repository access unless cached.
 
 ```sh
 docker compose --profile bench run --build --rm benchmark --output /results/run --seeds 7,42,2026 --repeats 3 --duration-ms 5000
 ```
 
-This matches the published workload configuration: four scenarios × four modes × three seeds × three repeats. It took about 15 minutes on the measured laptop, plus image-build time. It uses the live Prento executable; the recorded results retain their [measured source and image identity](qa/measurement-source/README.md). Timings vary across machines and runs.
+The suite covers four scenarios × four modes × three seeds × three repeats, matching the published workload. The benchmark laptop completed the suite in about 15 minutes, excluding image-build time. Timings vary by host and run.
 
-The runner prints per-trial generated/completed/drop/unknown counts and writes a report, latency chart, matched-message comparisons and raw outcomes to the `bench-results` volume. Read the report with:
+Results persist in the `bench-results` volume. Open the report to compare critical latency, bulk delay and completion outcomes:
 
 ```sh
 docker compose --profile bench run --rm --entrypoint cat benchmark /results/run/REPORT.md
 ```
 
-For another run, replace `/results/run` with a fresh path such as `/results/run-2` in both commands. Nonempty output directories are protected. See [native builds, the three-service demo and result retrieval](docs/RUNNING.md).
+Repeat with a fresh output path, such as `/results/run-2`, in both commands. The runner protects existing results from overwriting. For native builds, the three-service demo and raw-data retrieval, see the [running guide](docs/RUNNING.md).
 
 ## Architecture
+
+Scheduling chooses what goes next. Admission control limits how much payload enters the collector:
 
 ```mermaid
 flowchart LR
@@ -59,27 +61,27 @@ flowchart LR
 | Bounded push / TCP backpressure | `push/fifo` | `push/priority` |
 | Explicit receiver-issued credits | `credit/fifo` | `credit/priority` |
 
-The four modes isolate the effect of scheduling from the effect of explicit credits. Every mode uses full-batch collector reservations bounded by **256 KiB** in the recorded benchmark, identical payloads and checksums, and the same processing acknowledgments. This reservation budget does not cap process RSS or kernel buffers.
+All four modes share payloads, checksums, sink behavior and a **256 KiB collector reservation budget** in the recorded runs. Compare one axis at a time to measure each control's contribution. The budget caps reserved payload bytes; it does not bound process RSS or kernel buffering.
 
-Application-layer receiver control draws inspiration from Homa; the implementation runs over TCP. Producers expose one outstanding batch per connection, and batches are non-preemptive. [Methodology, wire protocol and measurement definitions](docs/METHODOLOGY.md).
+Receiver credits draw inspiration from Homa and run over TCP. Each producer exposes one outstanding batch per connection; batches are non-preemptive. [Protocol and measurement definitions](docs/METHODOLOGY.md).
 
 ## Validation and scope
 
-Real TCP integration tests cover accounting, admission order, ready-work scheduling and failure behavior. The recorded suite passes **18 core checks and 27 Python tests**, ASan/UBSan, TSan and three mutation checks. [Verification evidence](qa/VERIFICATION.md).
+Real TCP tests exercise corrupted payloads, backend loss, overload, shutdown and scheduling order. **18 core checks and 27 Python tests pass** in native, ASan/UBSan, TSan and Docker QA runs. Three independent mutations confirm that scheduling and credit tests detect deliberate defects. [Inspect the verification evidence](qa/VERIFICATION.md).
 
-Traffic classes are synthetic labels. The custom protocol acknowledges processing rather than durable storage. The [Kubernetes manifest](deploy/kubernetes.yaml) is an illustrative deployment configuration; production adapters and multi-node scaling remain validation work.
+Traffic classes are synthetic labels. ACK means simulated sink processing, not durable storage. The [Kubernetes manifest](deploy/kubernetes.yaml) is a deployment example. Production adapters and multi-node scaling are future work. The published benchmark retains its [exact measured source and image provenance](qa/measurement-source/README.md).
 
 ## Next experiments
 
-1. Instrument producer stages and evaluate producer-local priority.
-2. Add a standard telemetry adapter and an OpenTelemetry Collector baseline.
-3. Extend workload duration and test on independent hosts with a durable backend.
+1. **Target the dominant delay:** instrument producer stages, then test producer-local priority under fixed budgets. [Options and effort estimates](docs/PRODUCER_LATENCY.md).
+2. **Connect to existing pipelines:** add a standard telemetry adapter and compare against OpenTelemetry Collector.
+3. **Measure operational limits:** extend workload duration and test on independent hosts with a durable backend.
 
 ## Documentation
 
-- [Run and deploy](docs/RUNNING.md): Compose, native builds, metrics and Kubernetes examples.
-- [Methodology and protocol](docs/METHODOLOGY.md): fair comparisons, measurements and completion semantics.
-- [QA guide](qa/README.md): tests, evidence map and reproduction. `make qa-bundle` packages source, documentation and preserved benchmark evidence with checksums.
+- [Running guide](docs/RUNNING.md): Compose, native builds, metrics and Kubernetes examples.
+- [Methodology](docs/METHODOLOGY.md): fair comparisons, latency accounting and completion semantics.
+- [QA guide](qa/README.md): tests, raw evidence and reproduction. Build a checksummed source-and-evidence archive with `make qa-bundle`.
 - [Engineering notes](docs/ENGINEERING.md) · [Architecture decisions](DESIGN.md) · [MIT license](LICENSE).
 
 Created by [Khazretgali Sapenov](https://github.com/sapenov).
