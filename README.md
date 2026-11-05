@@ -123,11 +123,9 @@ The source does not retry failed batches. Receiver credits and state are local t
 
 `deploy/kubernetes.yaml` supplies two collectors, one bottleneck sink, Services and producer Jobs. Replace image tags with your registry digest (or explicitly load the image into a local cluster), then apply it in an isolated namespace. Job results are on ephemeral pod storage; copy them before deleting pods. This example has no HPA, custom metrics adapter or durability and is **not evidence of multi-node scaling**. Adding collectors cannot scale past the shared sink's capacity.
 
-## Scope and interview discussion
+## Future work
 
-Discuss the observed effect of priority, the incremental value/cost of credits, producer head-of-line blocking, fairness, timeout ambiguity and what a production capacity experiment would change. C++ skill is evidenced by source/tests, not a language-speed claim. Existing production experience is still needed to substantiate cloud infrastructure and Staff-level leadership.
-
-Future work: streaming/chunk grants and SRPT, producer-local priority, authenticated adapters for OTLP/gNMI, OTel Collector interoperability baseline, durable acknowledgment/replay, and tests on independent physical hosts. Each is a separate experiment; none is claimed complete here.
+Streaming/chunk grants and SRPT, producer-local priority, authenticated adapters for OTLP/gNMI, OTel Collector interoperability baseline, durable acknowledgment/replay, and tests on independent physical hosts. Each is a separate experiment; none is claimed complete here.
 
 Source: [sapenov/prento](https://github.com/sapenov/prento).
 
