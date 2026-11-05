@@ -232,6 +232,6 @@ A large post-send improvement may yield a smaller end-to-end improvement when pr
 
 Empirical p99/p99.9 remain in JSON. p99_equals_max marks runs where nearest-rank p99 selects the observed maximum; the tables call that observation max. Short samples cannot establish stable tails.
 
-Establish the timer model from binary/source provenance: historical evidence predates the timer fix, while corrected-timer evidence uses remaining-time bounded sleeps. This reporter does not infer timer behavior from CSV format. OS wake-up delays remain. Slowdown/pause changes act at batch entry and processing is non-preemptive. A pause is not a network partition or durability model. Do not mix timer versions.
+Sink processing is serialized and non-preemptive. Slowdown and pause settings apply at batch entry; pauses do not model network partitions or durable-backend crashes. OS wake-up delays can extend requested sleeps. Compare datasets only after checking sink-timing behavior, load-window duration and backend settings against the recorded source and executable provenance; CSV format alone does not establish comparability.
 
 Payload reservations do not cap process RSS or kernel socket buffering. Producer queues hold metadata; payloads are synthesized at send time. failed_unknown may include processing without an observed ACK; it is not known loss or exactly-once delivery.

@@ -10,4 +10,4 @@
 - Batches are non-preemptive. Priority classes are workload labels, not a production alert classifier.
 - Raw benchmark runs, configuration and environment must accompany results. Never replace measurements with estimated improvements. Do not overwrite nonempty run directories.
 - Before packaging claims, run the relevant Docker target and demo. Kubernetes manifests alone do not establish multi-node scalability.
-- Record actual design changes, failed checks and verification in docs/AGENT_WORKFLOW.md. Do not invent agent failures or human review decisions.
+- Record engineering decisions and verification in docs/ENGINEERING.md. Do not invent execution results or human review decisions.

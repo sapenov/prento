@@ -1,8 +1,8 @@
 # Effort to reduce producer-side latency
 
-This is an engineering estimate, not an implemented optimization or predicted benchmark result. Effort means focused hours for an experienced C++ engineer, including verification. The existing 144-trial measurements remain unchanged.
+This is an engineering estimate, not an implemented optimization or predicted benchmark result. Effort means focused hours for an experienced C++ engineer, including verification. The estimates use the [144-trial benchmark](../results/2026-11-04-qa/INTERPRETATION.md) as a diagnostic baseline.
 
-## What the current measurements establish
+## What the measurements establish
 
 For push/priority, critical means are 729.86 ms pre-send + 9.79 ms post-send in bursts, and 708.10 + 14.06 ms with a slow sink. Pre-send accounts for 98.7% and 98.1% of the remaining total. Source: [raw-backed interpretation](../results/2026-11-04-qa/INTERPRETATION.md).
 

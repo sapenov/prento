@@ -1,41 +1,26 @@
-# Verification record
+# Reference dataset: 48 trials
 
-This is the preserved **initial-version** record. Its sink timer had a one-millisecond sleep floor. The corrected implementation, additional tests and multi-seed evidence are documented in [the QA verification record](../qa/VERIFICATION.md). Do not combine results across these service models.
+This dataset uses four scenarios × four modes × three timing repeats, workload seed 42, three-second offered-load windows and a one-millisecond minimum sink sleep. It was measured on November 4, 2026 (America/New_York).
 
-Initial-version validation was performed on November 4, 2026 (America/New_York).
+The [main 144-trial benchmark](../qa/VERIFICATION.md) uses three seeds, five-second windows and sleeps bounded by the remaining requested duration. These service/load configurations differ; comparing their results cannot isolate a timer-related speedup. Use the main benchmark for the README findings.
+
+## Recorded results
 
 | Check | Result |
 |---|---|
-| Native GCC 13.3 release build, warnings as errors | Passed |
-| `make test` | 14 core assertions plus 11 Python tests passed |
-| `make sanitize` | Same core and real-process suite passed under AddressSanitizer and UndefinedBehaviorSanitizer |
-| Runtime Docker build | Passed; CMake build and CTest core suite passed in build stage |
-| Benchmark Docker build | Passed |
-| `docker compose config --quiet` | Passed |
-| Three-service Compose demo | 300 generated, 300 completed, zero producer drops or unknown outcomes |
-| Fixed-budget benchmark container | Exit 0, 48/48 trials completed; no OOM kill |
-| Outcome accounting | 15,852 generated = 15,852 completed across trials |
-| Reservation invariant | All 48 final counters show peak ≤262,144 bytes and current reservation 0 |
-| Independent read-only code review | Important lifecycle and packaging findings corrected; focused recheck found no remaining Critical/Important issues |
-| Kubernetes example | Supplied and reviewed statically; not deployed to a cluster |
-| ThreadSanitizer | Not run; ASan/UBSan do not prove absence of data races |
+| Benchmark completion | 48/48 trials; container exit 0 without OOM |
+| Outcome accounting | 15,852 generated = 15,852 completed; no drops or unknowns |
+| Collector reservations | Every peak ≤262,144 bytes; final reservation zero |
+| Critical samples | 13–18 per run; p99 values are exploratory near-maximum observations |
 
-Final native command log: `make test` reported 11 Python tests in 9.177 seconds, all OK, plus 14 core checks. Final sanitizer command log reported 11 Python tests in 10.094 seconds, all OK, plus the sanitized core checks. Sanitizers use separate binaries; release benchmarks do not use instrumented executables.
+The [findings](../results/2026-11-04-container/FINDINGS.md) summarize the median of three per-run p99 values, rather than a pooled percentile. The [complete report](../results/2026-11-04-container/REPORT.md) lists all trials. Each trial directory includes raw outcomes, exact commands and collector counters.
 
-## Container evidence
+## Configuration and identity
 
-Benchmark image: `sha256:b0599350e79dd0800bd1e7e15fd624d0d59129a00f2a096e134a50277061669a` (`linux/amd64`). Application binary SHA-256: `bc87d775b8918b8336514a614e20b5066e2b51675699c795c6fbe94556795660`.
+Separate producer, collector and sink processes communicate over loopback inside a container limited to four CPUs and 1 GiB. The shared WSL2 laptop reports Intel Core i9-10885H and 16 logical CPUs. This setup does not establish physical-network capacity or Kubernetes scale.
 
-Measured limits: `NanoCpus=4000000000`, `Memory=1073741824`; inside the container `cpu.max=400000 100000` and `memory.max=1073741824`. Host reports Intel Core i9-10885H, 16 logical CPUs, Linux/WSL2. This is a shared laptop, not an isolated physical benchmark cluster.
+Benchmark image: `sha256:b0599350e79dd0800bd1e7e15fd624d0d59129a00f2a096e134a50277061669a` (`linux/amd64`).
 
-The benchmark runner started separate real-TCP producer, collector and sink processes inside one fixed-budget container. The separate three-container Compose wiring was also verified. Neither establishes physical-network or multi-node Kubernetes scale.
+Executable SHA-256: `bc87d775b8918b8336514a614e20b5066e2b51675699c795c6fbe94556795660`.
 
-## Evidence locations
-
-- [Findings](../results/2026-11-04-container/FINDINGS.md)
-- [Every per-run p99 and outcome count](../results/2026-11-04-container/REPORT.md)
-- [Machine and container environment](../results/2026-11-04-container/environment.json)
-- [Structured summaries](../results/2026-11-04-container/summary.json)
-- Per-run subdirectories hold raw CSV, logs, exact commands and collector counters.
-
-Limitations: completion is simulated sink processing, not durability; slow/outage-like intervals act at batch entry; source queues are synthetic metadata; bulk fairness is among fitting requests; p99 estimates have small critical sample sizes; no external OTel baseline, automatic alert detection, Kafka, actual Homa, switch installation or cloud deployment is claimed.
+See the [environment](../results/2026-11-04-container/environment.json) and [structured summaries](../results/2026-11-04-container/summary.json). Completion means simulated sink processing, not durable storage. Batches are non-preemptive, and slowdown/pause settings apply at service entry.

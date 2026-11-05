@@ -6,11 +6,13 @@ A reproducible laptop experiment comparing **bounded TCP push/backpressure** and
 
 This project investigates a question: *does coordinated admission across producers help beyond priority-aware backpressure when a telemetry sink slows down?* It is an application-layer experiment inspired by Homa's receiver control. It is not an implementation of Homa and does not establish a novel transport algorithm.
 
-**Observed result:** in 144 corrected-timer container trials over three workload seeds, priority-aware push reduced mean critical end-to-end latency about **10% under bursts** and **13% with a slow sink**, versus push/FIFO. With priority enabled, **98.7% of remaining critical latency under bursts and 98.1% with a slow sink occurs before sending**. Credits added no consistent benefit beyond priority-aware push. All **79,236 generated messages completed** after drain, with no drops or unknown outcomes. Individual critical samples remain small; these results do not establish a tail SLO or production capacity. See [interpretation and trade-offs](results/2026-11-04-qa/INTERPRETATION.md), [full measured report](results/2026-11-04-qa/REPORT.md) and [QA verification](qa/VERIFICATION.md). The [initial 48-trial evidence](results/2026-11-04-container/FINDINGS.md) is preserved separately; its older timer/service model is not directly comparable.
+**Observed result:** across 144 Docker benchmark trials, priority-aware push reduced mean critical end-to-end latency about **10% under bursts** and **13% with a slow sink**, versus push/FIFO. With priority-aware push, **98.7% of critical latency under bursts and 98.1% with a slow sink occurs before sending**. Credits added no consistent benefit beyond priority-aware push. All **79,236 generated messages completed** after drain, with no drops or unknown outcomes.
 
-## QA handoff
+The benchmark covers four scenarios, four modes, three workload seeds and three timing repeats, with five-second load windows in a container limited to four CPUs and 1 GiB RAM. Individual critical samples are small; these results do not establish a tail SLO or production capacity. Read the [findings and trade-offs](results/2026-11-04-qa/INTERPRETATION.md) or the [complete measured report](results/2026-11-04-qa/REPORT.md).
 
-The QA ZIP includes source, tests, Docker/Compose/Kubernetes configuration, complete raw results, latency charts, verification logs and reproduction instructions. Start at [qa/README.md](qa/README.md). On a fresh extraction run `python3 scripts/verify_bundle.py . --strict` and `python3 qa/check_evidence.py`. Rebuild the archive with `make qa-bundle`; its adjacent SHA-256 file verifies the ZIP. Compiled binaries and Git metadata are excluded.
+## Testing and evidence
+
+Start with the [QA guide](qa/README.md) for checks, benchmark reproduction and a file map. The [verification summary](qa/VERIFICATION.md) lists recorded results and their evidence. Build a source-and-evidence ZIP with `make qa-bundle`; compiled binaries and Git metadata are excluded.
 
 ## Run the three-service demo
 
@@ -129,7 +131,7 @@ Streaming/chunk grants and SRPT, producer-local priority, authenticated adapters
 
 Source: [sapenov/prento](https://github.com/sapenov/prento).
 
-Engineering record and validation: [docs/ENGINEERING.md](docs/ENGINEERING.md). See the [producer-latency effort estimate](docs/PRODUCER_LATENCY.md), [QA review decisions](qa/REVIEW.md) and [MIT license](LICENSE).
+See the [engineering notes](docs/ENGINEERING.md), [producer-latency options and effort estimates](docs/PRODUCER_LATENCY.md), [test coverage and limitations](qa/REVIEW.md) and [MIT license](LICENSE).
 
 ## References
 

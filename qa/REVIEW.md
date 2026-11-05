@@ -1,20 +1,22 @@
-# Review findings
+# Test coverage and limitations
 
-Findings from AI-assisted review, with implementation decisions and verification evidence.
+Automated tests exercise the real C++ producer, collector and sink over TCP. AI-assisted review supplements those tests; it does not constitute human QA sign-off.
 
-| Finding | Decision and implementation |
+| Area | What is checked |
 |---|---|
-| Service-priority coverage gap | Accepted. Added the supplied two-method test using a 192-byte budget. Both queued payloads are admitted and ready before the held first ACK is released. Admission-only, service-only and premature-grant mutations now have separate sensitivity checks. |
-| Headline misses diagnosis | Accepted. README states the measured 98.7% burst / 98.1% slow-sink pre-send shares. Fine-grained pre-send causes remain unmeasured. |
-| Credit result varies by environment | Accepted with qualification. Retain measured regressions as observations of the current dataset; use "no consistent incremental win" as the conclusion. Neither 5.39% nor +0.33 ms is a universal cost estimate. |
-| One overload-test failure without captured details | Unresolved; no root cause established. NetworkTest cases now retain logs, commands, outcomes, producer output and timeout diagnostics on failure; CI uploads artifacts. No scheduling change, retry or timing relaxation hides the observation. |
-| Bundle counts | Fixed. Format 2 distinguishes source_payload_files, payload_files including BUNDLE.json, and archive_files including MANIFEST.sha256. Reserved metadata names are rejected. |
-| Unlisted files ignored by verification | Added optional --strict for a fresh extraction. Ordinary verification tolerates intentional subsequent build output while still checking every listed payload. |
+| Sink timing | Injected-clock checks cover submillisecond requests, final remainders, zero duration and cancellation. OS wake-up precision is outside the model's control. |
+| Admission priority and credits | A 64-byte reservation budget and held first ACK isolate admission order and prevent a grant while capacity is full. |
+| Ready-work service order | A separate 192-byte-budget test admits both waiting payloads and waits until they are ready before releasing the first ACK. Priority forwards `[1,3,2]`; FIFO forwards `[1,2,3]`, in both admission modes. |
+| Independent sensitivity | Three temporary mutations disable admission priority, disable service priority or grant before reservation. Each is rejected by the relevant integration test. |
+| Reports | Reject invalid completed timestamps, duplicate IDs, different logical inputs and mismatched settings or recorded executable identities. Retain completion changes and bulk costs. |
+| Archive integrity | Check metadata counts, reject reserved metadata names and verify listed checksums. Strict mode also rejects unlisted files in a fresh extraction. |
+| Failure diagnostics | A filesystem fixture verifies NetworkTest artifact retention; CI uploads the directory on failure. Scheduling/service-order failures are reported in test output. |
 
-Before this change, independent temporary mutations reproduced the specific gap: all 21 old tests passed with service priority disabled; the supplied test failed. With only admission priority disabled, the supplied test passed and the old admission test failed. The new three-mutation checker retains that separation.
+The suite contains 18 core checks and 26 Python tests. Recorded native, sanitizer and container results are listed in the [verification summary](VERIFICATION.md).
 
-The bundle-count, strict-mode and reserved-name fixtures failed before implementation and pass afterward. A real filesystem diagnostic-retention fixture failed before the retention code and passes afterward. The complete updated suite has 18 core checks and 26 Python tests. Sanitizer/mutation/container and artifact details are recorded in VERIFICATION.md and logs/.
+## Open questions
 
-The C++ application and measured-source fingerprints are unchanged. Existing 144-trial evidence remains the performance record; adding tests/docs/packaging does not justify generating a replacement headline. Claude's reported independent spot run is corroborating reviewer feedback, not a shipped second complete benchmark matrix.
-
-Producer optimization effort and fair-comparison requirements are in [docs/PRODUCER_LATENCY.md](../docs/PRODUCER_LATENCY.md). That optimization was estimated, not implemented in this update.
+- One externally reported overload-test failure lacks captured error details and has no established root cause. Preserve the error and artifacts if it recurs. No retries or timing relaxations are used to hide it.
+- Pre-send timestamps combine several causes. The measured 98.7% burst and 98.1% slow-sink shares do not show how much delay is removable; [producer-latency options](../docs/PRODUCER_LATENCY.md) require separate experiments.
+- Credit costs depend on the workload and environment. The main dataset supports “no consistent incremental benefit beyond priority-aware push,” not a universal overhead estimate.
+- Kubernetes deployment, physical-network behavior, production telemetry adapters and durable delivery remain unverified.

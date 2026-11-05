@@ -1,34 +1,32 @@
-# Engineering and verification record
+# Engineering notes
 
-Prento uses a dependency-free C++20 TCP protocol to compare receiver credits with bounded push, independently of priority scheduling. Its tests exercise the actual producer, collector and sink. Automated and AI-assisted code review complement those tests; they do not constitute a human QA sign-off.
+Prento uses dependency-free C++20 and POSIX TCP sockets to compare receiver credits with bounded push, independently of priority scheduling. Tests exercise the actual producer, collector and sink.
 
-## Defects found and corrected
+## Implementation and verification
 
-- **Idle connections:** persistent sessions previously timed out before their next batch. Collector and sink now poll idle sessions, applying a frame deadline once bytes start arriving. Low-rate producer tests cover reuse.
-- **Input validation:** command-specific option allowlists reject unknown settings, and producer options are validated before workers start.
-- **Shutdown:** scheduled producer waits check the atomic stop flag at short intervals, allowing prompt SIGTERM handling.
-- **Session lifecycle:** completed connection threads are reaped during operation while live peer caps remain enforced.
-- **Container wiring:** result-directory creation is idempotent, and the Kubernetes example supplies writable-volume group permissions.
-- **Sink timing:** remaining-time sleeps replace the artificial one-millisecond minimum. Injected-clock tests cover submillisecond requests, final remainders, zero duration and cancellation. OS wake-up precision remains outside the model's control.
-- **Measurement validation:** paired comparisons reject different logical workloads, sink/load/buffer/queue/timeout settings and executable identities. Pre-send and post-send intervals are derived from timestamps; neither is labeled isolated collector queueing.
-- **Scheduling coverage:** controlled TCP integration independently verifies admission priority and service ordering among already admitted payloads. Separate mutations disable admission priority, disable service priority and issue a grant before reservation; each is rejected by its relevant test.
-- **Failure diagnostics:** NetworkTest cases retain commands, logs, outcomes, producer output and timeout information on failure. A filesystem fixture verifies retention, and CI uploads the artifacts. One reported overload-test flake remains unconfirmed because its original error was not captured.
-- **Archive integrity:** metadata distinguishes source payloads, checked payloads and archive entries. Reserved metadata names are rejected; optional strict verification detects unlisted files before a fresh extraction is built.
+| Area | Behavior and evidence |
+|---|---|
+| Idle connections | Persistent sessions poll while idle; frame deadlines apply once bytes start arriving. Low-rate producer tests cover connection reuse. |
+| Input validation | Command-specific option allowlists reject unknown settings. Producer options are validated before workers start. |
+| Shutdown | Scheduled waits check the atomic stop flag at short intervals for prompt SIGTERM handling. |
+| Session lifecycle | Completed connection threads are reaped during operation; live peer caps remain enforced. |
+| Containers | Result-directory creation is idempotent. The Kubernetes example supplies writable-volume group permissions. |
+| Sink timing | Sleep requests are bounded by the remaining duration. Injected-clock tests cover short requests, final remainders, zero duration and cancellation. Actual wake-up precision depends on the OS. |
+| Measurement validation | Paired comparisons require matching logical workloads, sink/load/buffer/queue/timeout settings and recorded executable identities. Timestamp intervals include all pre-send and post-send work. |
+| Scheduling | Controlled TCP tests independently verify admission priority and service order among ready payloads. Separate mutations verify sensitivity to both selectors and premature grants. |
+| Failure diagnostics | NetworkTest failures retain commands, logs, outcomes, producer output and timeout information. A filesystem fixture verifies retention; CI uploads the artifacts. |
+| Packaging | Metadata distinguishes source payloads, checked payloads and archive entries. Reserved names are rejected. Strict checksum verification detects extra files in a fresh extraction. |
 
-## Execution issues retained as evidence
+Git attributes preserve source and experiment bytes across checkout platforms. Whitespace checks exclude recorded formatting in raw results and console logs. Public logs normalize local workspace prefixes without changing outcomes or timing values.
 
-Plain ThreadSanitizer startup failed on the WSL host with an unexpected memory mapping. Per-process `setarch -R` allowed execution; both the initial failure and successful runs are retained. No host-wide address-randomization setting changed.
+## Execution environment
 
-A report-regeneration attempt started before Docker copying finished and rejected an incomplete group. An archive check started before the ZIP writer finished and found no archive. Both checks passed once their input-producing commands had completed; the failed report attempt remains in the logs.
+The [recorded CI run](https://github.com/sapenov/prento/actions/runs/41965080263) passed native tests, sanitizers and the runtime Docker build. On the measured WSL host, TSan requires per-process `setarch -R` to avoid a startup memory-mapping failure; no host-wide setting is changed. [QA verification](../qa/VERIFICATION.md) identifies the commands, logs and measured-image provenance.
 
-The initial GitHub Actions configuration used a runner-only context at job level and failed validation before creating jobs. A relative diagnostic directory corrected it. The [subsequent CI run](https://github.com/sapenov/prento/actions/runs/41965080263) passed native tests, sanitizers and the runtime Docker build.
+The suite contains 18 core checks and 26 Python tests. The three-service Compose demo completed 300/300 messages. The main performance matrix completed 79,236/79,236 messages across 144 trials. Application fingerprints match the measured image.
 
-Git attributes preserve source and experiment bytes across checkout platforms. Whitespace checks exclude original formatting in raw results and console logs. Public logs normalize local workspace prefixes without altering recorded outcomes or timing values.
+## Limits and further work
 
-## Evidence and limits
+The experiment does not establish a production tail SLO, durable completion, exactly-once delivery or multi-node scale. Sink pauses act at batch entry, batches are non-preemptive and producer-local FIFO blocking remains. Kubernetes deployment, actual Homa, telemetry adapters and producer-priority optimizations have not been measured here.
 
-The current suite has 18 core checks and 26 Python tests. Native, ASan/UBSan, TSan and Docker test runs passed; Compose completed 300/300 messages. The 144-trial performance matrix completed 79,236/79,236 messages over three workload seeds. Application fingerprints still match the measured image.
-
-See [QA verification](../qa/VERIFICATION.md), [review findings](../qa/REVIEW.md), [measured interpretation](../results/2026-11-04-qa/INTERPRETATION.md) and [producer-latency options](PRODUCER_LATENCY.md). The older [initial-version record](VERIFICATION.md) uses a different sink timer and remains separate.
-
-The experiment does not establish protocol novelty, a production tail SLO, durable completion, exactly-once delivery or multi-node scale. Sink pauses act at batch entry, batches are non-preemptive, and producer-local FIFO blocking remains. Kubernetes deployment, actual Homa, telemetry adapters and producer-priority optimizations have not been measured here.
+See the [coverage notes](../qa/REVIEW.md), [benchmark findings](../results/2026-11-04-qa/INTERPRETATION.md) and [producer-latency options](PRODUCER_LATENCY.md). A [48-trial reference dataset](VERIFICATION.md) has different sink-timing and load settings and must be considered separately.

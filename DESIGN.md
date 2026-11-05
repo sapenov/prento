@@ -1,11 +1,11 @@
-# Prento
+# Prento architecture
 
-Build a Linux laptop experiment comparing bounded push/backpressure and explicit receiver credits, independently of FIFO versus priority scheduling. C++20, real TCP producer → collector → controllably slow sink, Docker Compose, reproducible workloads, outcome accounting and tests. This is an application-layer experiment inspired by Homa; no Homa implementation, switch hardware or production capacity claims.
+A Linux laptop experiment comparing bounded push/backpressure and explicit receiver credits, independently of FIFO versus priority scheduling. C++20, real TCP producer → collector → controllably slow sink, Docker Compose, reproducible workloads, outcome accounting and tests. This is an application-layer experiment inspired by Homa; no Homa implementation, switch hardware or production capacity claims.
 
 ## Decisions
 
 - One executable with collector, producer and sink commands. C++ standard library and POSIX sockets; no download required for a native Make build. CMake is also supplied for container builds.
-- Full-batch admission with a byte reservation until sink completion. Four combinations: push/fifo, push/priority, credit/fifo, credit/priority. Priority favors critical traffic with a periodic bulk opportunity. No SRPT, packet preemption, unscheduled bytes, durable recovery or exactly-once claim in version one.
+- Full-batch admission with a byte reservation until sink completion. Four combinations: push/fifo, push/priority, credit/fifo, credit/priority. Priority favors critical traffic with a periodic bulk opportunity. No SRPT, packet preemption, unscheduled bytes, durable recovery or exactly-once claim in this implementation.
 - Same persistent TCP connection for announce, optional grant, body, final acknowledgment. Collector reserves before reading body in both modes. Push can buffer in sender/kernel sockets; credits require explicit permission. Account for this difference in results.
 - Bounded collector payload reservations and bounded producer metadata queues. Payloads are synthetic and allocated only at send time; report logical queued bytes separately from resident memory. Batch checksums detect corruption. No loss is silently called success.
 - Producers generate on an intended schedule independent of completions, with bounded local queues. Every generated item gets exactly one CSV terminal outcome (completed, failed/unknown, producer_drop). A failed/unknown result can have reached the sink; never claim zero duplicates or exactly-once.
@@ -17,9 +17,9 @@ Build a Linux laptop experiment comparing bounded push/backpressure and explicit
 
 ## Deliverables and limits
 
-README with measured results, architecture and limitations; source/tests; Makefile/CMake; non-root multi-stage container/Compose; benchmark and report commands producing CSV/JSON/standalone SVG; CI; actual agent workflow record. Kubernetes manifests demonstrate deployment only and are secondary to working native/Compose verification.
+README with measured results, architecture and limitations; source/tests; Makefile/CMake; non-root multi-stage container/Compose; benchmark and report commands producing CSV/JSON/standalone SVG; CI; engineering notes and verification evidence. Kubernetes manifests illustrate deployment configuration only and are secondary to working native/Compose verification.
 
 
-## QA update
+## Timing and measurement validation
 
-Sink sleeps are bounded by the remaining requested duration, with deterministic injected-clock regression checks; OS wake-up precision is not guaranteed. TCP integration with a controlled backend proves admission ordering and full-budget grant withholding. Reporting splits completed-message latency into pre-send and post-send intervals, validates matched configuration and inputs, and retains completion changes and observed maxima. Multi-seed trials keep the four modes unchanged; no producer-side priority is introduced. Historical raw evidence remains separate from corrected-timer data.
+Sink sleeps are bounded by the remaining requested duration, with deterministic injected-clock regression checks; OS wake-up precision is not guaranteed. TCP integration with a controlled backend proves admission ordering and full-budget grant withholding. Reporting splits completed-message latency into pre-send and post-send intervals, validates matched configuration and inputs, and retains completion changes and observed maxima. The benchmark compares all four modes over three workload seeds. Producer-side queues remain FIFO. The separate 48-trial dataset uses different sink-timing and load-window settings; its results are not combined with the 144-trial dataset.

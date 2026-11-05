@@ -1,6 +1,6 @@
 # Observed result and limitations
 
-48 trials: four modes × four scenarios × three repeats. The same seed repeats message classes and sizes; timings vary. Each offered-load window is three seconds. The container was capped at four CPUs and 1 GiB RAM on a shared WSL2 laptop.
+48 trials: four modes × four scenarios × three repeats, using seed 42 and a one-millisecond minimum sink sleep. The same seed repeats message classes and sizes; timings vary. Each offered-load window is three seconds. The container was capped at four CPUs and 1 GiB RAM on a shared WSL2 laptop.
 
 | Scenario | Push/FIFO critical p99 ms | Push/priority critical p99 ms | Credit/FIFO critical p99 ms | Credit/priority critical p99 ms | Critical samples per run |
 |---|---:|---:|---:|---:|---:|
@@ -10,6 +10,8 @@
 | outage | 897.62 | 898.05 | 897.67 | 898.14 | 13 |
 
 Numbers above are the median of three per-run p99 values, not a pooled p99. Short critical samples make these exploratory near-maximum observations. No statistical significance claim is made.
+
+The [main 144-trial benchmark](../2026-11-04-qa/INTERPRETATION.md) has different service timing and load-window settings. Interpret each dataset separately; their difference cannot isolate a timer-related speedup.
 
 ## Findings
 

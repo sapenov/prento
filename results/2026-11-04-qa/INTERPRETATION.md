@@ -1,4 +1,4 @@
-# What the corrected experiment shows
+# Benchmark findings
 
 The simpler priority-aware push baseline is the strongest default in this measured workload. Receiver credits did not show a consistent additional end-to-end advantage. These are descriptive laptop results, not statistical significance or production recommendations.
 
@@ -24,12 +24,12 @@ Compare push/priority against credit/priority. Critical mean end-to-end latency 
 
 The steady-state priority comparison is also noisy: about 0.10 ms lower mean in aggregate, with a per-seed range that crosses zero. Its percentage is not a useful headline. The finite scenario changes and service-entry timing can also make bulk means fluctuate in either direction; scheduling does not create backend capacity.
 
-## What QA should challenge
+## Measurement limits
 
 Each individual trial has only 22–45 completed critical messages. Nearest-rank p99 therefore selects the observed maximum; p99 and p99.9 remain inspectable in JSON but cannot establish a tail SLO. Per-seed ranges are descriptive ranges over three seeds, not confidence intervals. Matched logical inputs do not remove OS scheduling variability or shared-host interference.
 
 All processes communicate over loopback inside one container capped at four CPUs and 1 GiB; the host is a shared WSL laptop. The sink is a serialized, non-preemptive service simulator. Completion is not durable storage. Batch-entry pauses are not actual backend crashes or network partitions. Raw timestamp-derived breakdowns, configuration validation, image/binary provenance and logs are included so QA can inspect these limits.
 
-The preserved initial-version runs used a one-millisecond sleep floor and shorter load windows. They are historical evidence, not a controlled before/after timer-speed benchmark. No percentage improvement from fixing the timer is claimed.
+The [48-trial reference dataset](../../docs/VERIFICATION.md) uses seed 42, three-second load windows and a one-millisecond minimum sink sleep. This 144-trial dataset uses three seeds, five-second windows and sleeps bounded by the remaining requested duration. The differing service/load configurations cannot isolate a timer-related speedup.
 
 A sensible next experiment would isolate producer-local priority or chunked admission, one variable at a time. Neither is implemented here. The comparison identifies a useful priority effect, upstream blocking that limits end-to-end gains, and a need for further evidence to justify explicit credits.
