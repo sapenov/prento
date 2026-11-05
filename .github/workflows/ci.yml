@@ -4,7 +4,7 @@ jobs:
   test:
     runs-on: ubuntu-24.04
     env:
-      FANIN_FAILURE_DIR: ${{ runner.temp }}/fanin-failures
+      FANIN_FAILURE_DIR: qa-local/failures
     steps:
       - uses: actions/checkout@v4
       - run: make test
@@ -15,5 +15,5 @@ jobs:
         if: failure()
         with:
           name: process-test-failure-diagnostics
-          path: ${{ runner.temp }}/fanin-failures
+          path: ${{ env.FANIN_FAILURE_DIR }}
           if-no-files-found: ignore
