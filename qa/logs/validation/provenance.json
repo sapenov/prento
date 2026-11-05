@@ -1,0 +1,68 @@
+{
+  "preserved_evidence_files": 1405,
+  "evidence_bytes_unchanged": true,
+  "measured_source_fingerprints": "matched",
+  "live_source_difference": "naming substitutions only",
+  "sources": [
+    {
+      "measured_path": "CMakeLists.txt",
+      "measured_sha256": "d893c011baef66dff35590564a44e00f65c0f9cb13f024dab7b47f13015e7941",
+      "live_path": "CMakeLists.txt",
+      "live_sha256": "057ef7c6844e13d9864aec44b4c5836b8c9e860497f931563d9869bf6193eb7e"
+    },
+    {
+      "measured_path": "include/fanin/app.hpp",
+      "measured_sha256": "b9c48bc9afd07f38f206fba6b6975c7ba124cc5d73a6d46bbaa2953af06a743d",
+      "live_path": "include/prento/app.hpp",
+      "live_sha256": "2bdf7a4130610fcbde1d87bc2904e1e6b7edd759f87ecdfc9e86fc253e89e09c"
+    },
+    {
+      "measured_path": "include/fanin/core.hpp",
+      "measured_sha256": "887248ca8a613293f59f410fcb37fb152781772e7d581975bd3e7f5939732d09",
+      "live_path": "include/prento/core.hpp",
+      "live_sha256": "3a91c654240266450658452134c4d11770253a4d61c20081cfbfda84c1a6230e"
+    },
+    {
+      "measured_path": "include/fanin/net.hpp",
+      "measured_sha256": "687056ad2d02787e083c93242599186fcea6a47ac58bdddd9af2349d78765b5b",
+      "live_path": "include/prento/net.hpp",
+      "live_sha256": "88c829629b059b3421222645a9dca4d19799e3c8e7e862f2c9b459dc6a7fbfc0"
+    },
+    {
+      "measured_path": "include/fanin/threads.hpp",
+      "measured_sha256": "194ce989797dccbe29a215543b3a3a4b33410e1d7dfc4321aebc782ec5a88b01",
+      "live_path": "include/prento/threads.hpp",
+      "live_sha256": "a2ac63c4305a3d5a2ef0805dcfe0f099599d33550ba76570e2dab64eb091433e"
+    },
+    {
+      "measured_path": "include/fanin/timing.hpp",
+      "measured_sha256": "93143537e98cbc4c3807f2e4b14548522d836026e7afc1a8ceb53e67e17c71b1",
+      "live_path": "include/prento/timing.hpp",
+      "live_sha256": "3a2f0451db2af7f94271eb415662471ebb9794c6ccbb1728f12679c3539b7d56"
+    },
+    {
+      "measured_path": "src/collector.cpp",
+      "measured_sha256": "cef2523a1866eceb6c17afe949fc271aab3ac5fa84bb13c4e1e97d50d0048e2d",
+      "live_path": "src/collector.cpp",
+      "live_sha256": "d740626cb0ea3a7f6e9467ff4e6122c04d97b0c1b88c89da61ada01c1a1b5bee"
+    },
+    {
+      "measured_path": "src/main.cpp",
+      "measured_sha256": "92dda8d0409cd6bf184d767ab053cd08907a0eceb8dd855d81e537d8bfac3182",
+      "live_path": "src/main.cpp",
+      "live_sha256": "08981c7fa5c0ff9b7393ac1356d3e4baf4715bd8c728cd5a0a8d7cc042e4994b"
+    },
+    {
+      "measured_path": "src/producer.cpp",
+      "measured_sha256": "560bfb9e15f05679eb35ebc6aa99ff8c7543e9a4224d6e8cb2fcb38f56df4770",
+      "live_path": "src/producer.cpp",
+      "live_sha256": "8caae89c1dd1cf991fc103a510dca1d732d8292ef54389460fc3adc0b4eccf6a"
+    },
+    {
+      "measured_path": "src/sink.cpp",
+      "measured_sha256": "38a2654dd65c41f212a7526f1f28ab6557b226b26587cd54e0b83c5af7a535bc",
+      "live_path": "src/sink.cpp",
+      "live_sha256": "71a6bcaa00320bddac3d4184843b636534ca1f10a2cefde0da4fba7a387ab3b0"
+    }
+  ]
+}

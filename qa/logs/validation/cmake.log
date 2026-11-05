@@ -1,0 +1,33 @@
+Host CMake is unavailable; using the Docker QA toolchain. Live CMake/core checks run during image build.
+$ cmake -S /measured -B /tmp/measured-source -DCMAKE_BUILD_TYPE=Release
+-- The CXX compiler identification is GNU 13.3.0
+-- Detecting CXX compiler ABI info
+-- Detecting CXX compiler ABI info - done
+-- Check for working CXX compiler: /usr/bin/c++ - skipped
+-- Detecting CXX compile features
+-- Detecting CXX compile features - done
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD
+-- Performing Test CMAKE_HAVE_LIBC_PTHREAD - Success
+-- Found Threads: TRUE  
+-- Configuring done (1.3s)
+-- Generating done (0.0s)
+-- Build files have been written to: /tmp/measured-source
+$ cmake --build /tmp/measured-source -j 2
+[ 14%] Building CXX object CMakeFiles/core-test.dir/tests/core_test.cpp.o
+[ 28%] Building CXX object CMakeFiles/fanin.dir/src/main.cpp.o
+[ 42%] Linking CXX executable core-test
+[ 42%] Built target core-test
+[ 57%] Building CXX object CMakeFiles/fanin.dir/src/collector.cpp.o
+[ 71%] Building CXX object CMakeFiles/fanin.dir/src/producer.cpp.o
+[ 85%] Building CXX object CMakeFiles/fanin.dir/src/sink.cpp.o
+[100%] Linking CXX executable fanin
+[100%] Built target fanin
+$ ctest --test-dir /tmp/measured-source --output-on-failure
+Internal ctest changing into directory: /tmp/measured-source
+Test project /tmp/measured-source
+    Start 1: core
+1/1 Test #1: core .............................   Passed    0.02 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   0.02 sec

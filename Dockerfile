@@ -13,11 +13,11 @@ FROM ubuntu:24.04 AS runtime
 RUN apt-get update && apt-get install -y --no-install-recommends \
     libstdc++6 libgcc-s1 && rm -rf /var/lib/apt/lists/* \
     && mkdir /results && chown 10001:10001 /results
-COPY --from=build /src/build/fanin /usr/local/bin/fanin
+COPY --from=build /src/build/prento /usr/local/bin/prento
 USER 10001:10001
 WORKDIR /tmp
 EXPOSE 9000 9001 9090
-ENTRYPOINT ["/usr/local/bin/fanin"]
+ENTRYPOINT ["/usr/local/bin/prento"]
 CMD ["--help"]
 
 # Optional benchmark runner: same application plus stdlib-only orchestration.
@@ -28,7 +28,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY scripts /lab/scripts
 RUN mkdir -p /results && chown 10001:10001 /results
 USER 10001:10001
-ENTRYPOINT ["python3", "/lab/scripts/bench.py", "--binary", "/usr/local/bin/fanin"]
+ENTRYPOINT ["python3", "/lab/scripts/bench.py", "--binary", "/usr/local/bin/prento"]
 CMD ["--output", "/results/run"]
 
 # QA toolchain: native and sanitizer tests without host compiler dependencies.

@@ -147,7 +147,7 @@ def run(args, scenario, admission, policy, seed, repeat, destination):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--binary", default=str(ROOT / "build/fanin"))
+    parser.add_argument("--binary", default=str(ROOT / "build/prento"))
     parser.add_argument("--output", default="results/latest")
     parser.add_argument("--duration-ms", type=int, default=3000)
     parser.add_argument("--rate", type=float, default=100)

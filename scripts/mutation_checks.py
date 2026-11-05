@@ -18,7 +18,7 @@ def replace_once(text,old,new):
     return text.replace(old,new,1)
 
 def main():
-    with tempfile.TemporaryDirectory(prefix="fanin-mutation-") as tmp:
+    with tempfile.TemporaryDirectory(prefix="prento-mutation-") as tmp:
         temp=Path(tmp)
         shutil.copytree(ROOT/'include',temp/'include')
         shutil.copytree(ROOT/'src',temp/'src')
@@ -40,7 +40,7 @@ def main():
                      *[str(temp/'src'/name) for name in ('main.cpp','collector.cpp','producer.cpp','sink.cpp')],'-o',str(binary)]
             subprocess.run(command,check=True)
             result=subprocess.run(['python3','-m','unittest','discover','-s','tests','-p','test_*.py','-k',selector,'-v'],
-                                  cwd=ROOT,env=dict(os.environ,FANIN_BINARY=str(binary)),capture_output=True,text=True,timeout=30)
+                                  cwd=ROOT,env=dict(os.environ,PRENTO_BINARY=str(binary)),capture_output=True,text=True,timeout=30)
             print(f'=== {name}: test exit {result.returncode} ===',flush=True)
             print(result.stdout+result.stderr,flush=True)
             if result.returncode==0 or expected not in result.stdout+result.stderr:

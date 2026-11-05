@@ -113,8 +113,8 @@ class SchedulingTest(unittest.TestCase):
                     deadline=time.monotonic()+3
                     while time.monotonic()<deadline:
                         snapshot=state()
-                        if snapshot["fanin_waiting_announcements"]==count:
-                            self.assertEqual(snapshot["fanin_reserved_bytes"],64)
+                        if snapshot["prento_waiting_announcements"]==count:
+                            self.assertEqual(snapshot["prento_reserved_bytes"],64)
                             return
                         time.sleep(.005)
                     self.fail("collector did not expose expected pending announcements")
@@ -129,7 +129,7 @@ class SchedulingTest(unittest.TestCase):
                         with self.assertRaises(socket.timeout):
                             client.recv(1)
                         client.settimeout(4)
-                    self.assertEqual(state()["fanin_reserved_bytes"],64)
+                    self.assertEqual(state()["prento_reserved_bytes"],64)
 
                 def finish(client,payload):
                     if credit:
@@ -152,7 +152,7 @@ class SchedulingTest(unittest.TestCase):
                     raise backend.error
                 expected=[1,3,2] if policy=="priority" else [1,2,3]
                 self.assertEqual(backend.received,expected)
-                self.assertEqual(state()["fanin_reserved_bytes"],0)
+                self.assertEqual(state()["prento_reserved_bytes"],0)
             finally:
                 backend.release.set()
                 for client in clients:

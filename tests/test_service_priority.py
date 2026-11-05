@@ -16,7 +16,7 @@ import unittest
 import urllib.request
 from pathlib import Path
 
-sys.path.insert(0, os.environ.get("FANIN_TESTS", str(Path(__file__).resolve().parent)))
+sys.path.insert(0, os.environ.get("PRENTO_TESTS", str(Path(__file__).resolve().parent)))
 import test_network as network  # noqa: E402
 from test_scheduling import FRAME, HeldBackend, exact, payload_header  # noqa: E402
 
@@ -44,7 +44,7 @@ class ServicePriorityTest(unittest.TestCase):
                 def wait_ready(count):
                     deadline = time.monotonic() + 3
                     while time.monotonic() < deadline:
-                        if state()["fanin_ready_batches"] == count:
+                        if state()["prento_ready_batches"] == count:
                             return
                         time.sleep(.005)
                     self.fail(f"expected {count} ready batches")
@@ -65,7 +65,7 @@ class ServicePriorityTest(unittest.TestCase):
                 wait_ready(1)            # bulk is admitted and ready before the critical batch exists
                 critical = send(3, True)
                 wait_ready(2)
-                self.assertEqual(state()["fanin_waiting_announcements"], 0)  # no admission contention
+                self.assertEqual(state()["prento_waiting_announcements"], 0)  # no admission contention
                 backend.release.set()
                 for client in (first, bulk, critical):
                     self.assertEqual(FRAME.unpack(exact(client, 32))[2], 3)

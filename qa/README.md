@@ -47,6 +47,7 @@ docker run --rm prento:qa-tools make sanitize
 | [Benchmark findings](../results/2026-11-04-qa/INTERPRETATION.md) | Main conclusions, trade-offs and sample-size limits |
 | [Benchmark report](../results/2026-11-04-qa/REPORT.md) | Complete 144-trial tables and latency breakdown |
 | `results/2026-11-04-qa/` | Raw trials, environment, charts and machine-readable summaries |
+| [measurement-source/](measurement-source/README.md) | Exact application source for the recorded benchmark; separate from live Prento source |
 | [measurement-runner/](measurement-runner/README.md) | Measured image identity, source fingerprints and captured runner scripts |
 | [logs/](logs/README.md) | Test and execution logs; the verification summary identifies the relevant files |
 | [Reference dataset](../docs/VERIFICATION.md) | Separate 48-trial configuration with a one-millisecond sink sleep floor |
@@ -81,4 +82,4 @@ For a three-container demo, follow the [README](../README.md#run-the-three-servi
 
 Check completion/drop/unknown counts, reservation peaks and final release alongside latency, bulk cost and per-seed variation. Small critical sample counts make p99 an observed maximum, not a tail guarantee. Sink pauses apply at batch entry; processing is non-preemptive. ACK means simulated processing, not durable storage. `failed_unknown` means uncertain delivery.
 
-NetworkTest failures retain commands, logs, outcomes and producer output under `qa-local/failures` or `FANIN_FAILURE_DIR`; CI uploads that directory on failure. Scheduling/service-order tests report failures in test output. Report the command, environment, error and available artifacts. A reviewer can record findings locally; the supplied evidence does not constitute human QA sign-off.
+NetworkTest failures retain commands, logs, outcomes and producer output under `qa-local/failures` or `PRENTO_FAILURE_DIR`; CI uploads that directory on failure. Scheduling/service-order tests report failures in test output. Report the command, environment, error and available artifacts. A reviewer can record findings locally; the supplied evidence does not constitute human QA sign-off.

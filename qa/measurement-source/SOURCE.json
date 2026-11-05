@@ -1,0 +1,27 @@
+{
+  "source_commit": "61521397d585adfec2fe484eee01f0bdb3e0ac11",
+  "measured_source_fingerprints": "../measurement-runner/source-sha256.json",
+  "build_support_sha256": {
+    "tests/core_test.cpp": "bfe3712021523dbad687f831f127a3c41a02fdc3f02656d6aed9db9cf62573df"
+  },
+  "live_source_mapping": {
+    "path_replacement": [
+      "fanin",
+      "prento"
+    ],
+    "text_replacements": [
+      [
+        "fanin_lab",
+        "prento"
+      ],
+      [
+        "FANIN",
+        "PRENTO"
+      ],
+      [
+        "fanin",
+        "prento"
+      ]
+    ]
+  }
+}

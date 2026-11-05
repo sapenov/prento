@@ -21,9 +21,9 @@ Git attributes preserve source and experiment bytes across checkout platforms. W
 
 ## Execution environment
 
-The [recorded CI run](https://github.com/sapenov/prento/actions/runs/41965080263) passed native tests, sanitizers and the runtime Docker build. On the measured WSL host, TSan requires per-process `setarch -R` to avoid a startup memory-mapping failure; no host-wide setting is changed. [QA verification](../qa/VERIFICATION.md) identifies the commands, logs and measured-image provenance.
+The [CI workflow](../.github/workflows/ci.yml) runs native tests, sanitizers and the runtime Docker build. On the measured WSL host, TSan requires per-process `setarch -R` to avoid a startup memory-mapping failure; no host-wide setting is changed. [QA verification](../qa/VERIFICATION.md) identifies the commands, logs and measured-image provenance.
 
-The suite contains 18 core checks and 26 Python tests. The three-service Compose demo completed 300/300 messages. The main performance matrix completed 79,236/79,236 messages across 144 trials. Application fingerprints match the measured image.
+The suite contains 18 core checks and 26 Python tests. The three-service Compose demo completed 300/300 messages. The main performance matrix completed 79,236/79,236 messages across 144 trials. The [measured source snapshot](../qa/measurement-source/README.md) matches the recorded application fingerprints. Live source and tools consistently use Prento identifiers; archived results retain their measured names and executable identity.
 
 ## Limits and further work
 

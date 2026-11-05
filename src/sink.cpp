@@ -1,12 +1,12 @@
-#include "fanin/net.hpp"
-#include "fanin/threads.hpp"
-#include "fanin/timing.hpp"
+#include "prento/net.hpp"
+#include "prento/threads.hpp"
+#include "prento/timing.hpp"
 #include <iostream>
 #include <mutex>
 #include <thread>
 #include <vector>
 
-namespace fanin {
+namespace prento {
 int sink(const Args& args) {
     auto rate=args.real("bytes-per-sec",1048576);
     auto factor=args.real("slow-factor",10);

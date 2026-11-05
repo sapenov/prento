@@ -10,7 +10,7 @@ class ReportTest(unittest.TestCase):
     def test_report_includes_losses_and_uses_nearest_rank(self):
         path = ROOT / "scripts/report.py"
         self.assertTrue(path.exists(), "report implementation is missing")
-        spec = importlib.util.spec_from_file_location("fanin_report", path)
+        spec = importlib.util.spec_from_file_location("prento_report", path)
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         rows = [
@@ -36,7 +36,7 @@ class ReportTest(unittest.TestCase):
             module.summarize(rows + [rows[0]], 100)
 
     def test_paired_comparison_validates_inputs_and_preserves_failures(self):
-        spec = importlib.util.spec_from_file_location("fanin_report", ROOT / "scripts/report.py")
+        spec = importlib.util.spec_from_file_location("prento_report", ROOT / "scripts/report.py")
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         reference = [
@@ -57,7 +57,7 @@ class ReportTest(unittest.TestCase):
             module.compare_pair(reference,candidate)
 
     def test_impossible_completed_timestamps_are_rejected(self):
-        spec = importlib.util.spec_from_file_location("fanin_report", ROOT / "scripts/report.py")
+        spec = importlib.util.spec_from_file_location("prento_report", ROOT / "scripts/report.py")
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         row={"id":"1","class":"critical","bytes":"100","intended_ns":"100","send_ns":"0","end_ns":"200","latency_ms":"0.0001","producer_wait_ms":"0","status":"completed"}
@@ -65,7 +65,7 @@ class ReportTest(unittest.TestCase):
             module.summarize([row], 100)
 
     def test_matching_modes_require_same_experiment_and_binary(self):
-        spec = importlib.util.spec_from_file_location("fanin_report", ROOT / "scripts/report.py")
+        spec = importlib.util.spec_from_file_location("prento_report", ROOT / "scripts/report.py")
         module = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(module)
         common=dict(duration_ms=1000,rate=100,sink_rate=1000000,producers=4,queue_items=16,

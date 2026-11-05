@@ -1,4 +1,4 @@
-#include "fanin/net.hpp"
+#include "prento/net.hpp"
 #include <condition_variable>
 #include <deque>
 #include <fstream>
@@ -9,7 +9,7 @@
 #include <thread>
 #include <vector>
 
-namespace fanin {
+namespace prento {
 namespace {
 struct Work { Header header; };
 struct Queue {

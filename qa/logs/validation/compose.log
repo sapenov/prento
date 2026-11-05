@@ -1,0 +1,34 @@
+$ docker compose --project-name prento-validation config --quiet
+$ docker compose --project-name prento-validation up -d --no-build sink collector
+ Network prento-validation_default Creating 
+ Network prento-validation_default Creating 
+ Network prento-validation_default Created 
+ Network prento-validation_default Created 
+ Container prento-validation-sink-1 Creating 
+ Container prento-validation-sink-1 Created 
+ Container prento-validation-collector-1 Creating 
+ Container prento-validation-collector-1 Created 
+ Container prento-validation-sink-1 Starting 
+ Container prento-validation-sink-1 Started 
+ Container prento-validation-collector-1 Starting 
+ Container prento-validation-collector-1 Started 
+$ docker compose --project-name prento-validation run --rm --no-deps producer
+{"generated":300,"completed":300,"failed_unknown":0,"producer_drop":0,"sum_per_producer_peak_queued_bytes":524288}
+ Volume prento-validation_demo-results Creating 
+ Volume prento-validation_demo-results Creating 
+ Volume prento-validation_demo-results Created 
+ Volume prento-validation_demo-results Created 
+ Container prento-validation-producer-run-35a9fa1951b9 Creating 
+ Container prento-validation-producer-run-35a9fa1951b9 Created 
+ Container prento-validation-collector-1 Stopping 
+ Container prento-validation-collector-1 Stopped 
+ Container prento-validation-collector-1 Removing 
+ Container prento-validation-collector-1 Removed 
+ Container prento-validation-sink-1 Stopping 
+ Container prento-validation-sink-1 Stopped 
+ Container prento-validation-sink-1 Removing 
+ Container prento-validation-sink-1 Removed 
+ Network prento-validation_default Removing 
+ Volume prento-validation_demo-results Removing 
+ Volume prento-validation_demo-results Removed 
+ Network prento-validation_default Removed 

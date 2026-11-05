@@ -1,9 +1,9 @@
-#include "fanin/app.hpp"
+#include "prento/app.hpp"
 #include <cmath>
 #include <iostream>
 #include <stdexcept>
 
-namespace fanin {
+namespace prento {
 std::atomic_bool stopping=false;
 static_assert(std::atomic_bool::is_always_lock_free);
 Args::Args(int argc,char** argv) {
@@ -43,18 +43,18 @@ double Args::real(const std::string& k,double fallback) const {
 }
 int main(int argc,char** argv) {
     try {
-        std::signal(SIGINT,[](int){fanin::stopping=1;});
-        std::signal(SIGTERM,[](int){fanin::stopping=1;});
+        std::signal(SIGINT,[](int){prento::stopping=1;});
+        std::signal(SIGTERM,[](int){prento::stopping=1;});
         std::signal(SIGPIPE,SIG_IGN);
         if(argc<2 || std::string(argv[1])=="--help") {
-            std::cout<<"fanin collector|producer|sink [--option value ...]\nSee README.md for documented options.\n";
+            std::cout<<"prento collector|producer|sink [--option value ...]\nSee README.md for documented options.\n";
             return argc<2?1:0;
         }
-        fanin::Args args(argc,argv);
+        prento::Args args(argc,argv);
         std::string cmd=argv[1];
-        if(cmd=="collector") return fanin::collector(args);
-        if(cmd=="producer") return fanin::producer(args);
-        if(cmd=="sink") return fanin::sink(args);
+        if(cmd=="collector") return prento::collector(args);
+        if(cmd=="producer") return prento::producer(args);
+        if(cmd=="sink") return prento::sink(args);
         throw std::invalid_argument("unknown command");
     } catch(const std::exception& e) { std::cerr<<"error: "<<e.what()<<'\n'; return 1; }
 }

@@ -3,14 +3,14 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: fanin-collector
+  name: prento-collector
 spec:
   replicas: 2
   selector:
-    matchLabels: {app: fanin-collector}
+    matchLabels: {app: prento-collector}
   template:
     metadata:
-      labels: {app: fanin-collector}
+      labels: {app: prento-collector}
     spec:
       terminationGracePeriodSeconds: 15
       securityContext:
@@ -20,7 +20,7 @@ spec:
       containers:
         - name: collector
           image: prento:local
-          args: [collector, --bind, 0.0.0.0, --sink, "fanin-sink:9001", --admission, credit, --policy, priority]
+          args: [collector, --bind, 0.0.0.0, --sink, "prento-sink:9001", --admission, credit, --policy, priority]
           ports:
             - {name: ingest, containerPort: 9000}
             - {name: metrics, containerPort: 9090}
@@ -40,23 +40,23 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-metadata: {name: fanin-collector}
+metadata: {name: prento-collector}
 spec:
-  selector: {app: fanin-collector}
+  selector: {app: prento-collector}
   ports:
     - {name: ingest, port: 9000, targetPort: ingest}
     - {name: metrics, port: 9090, targetPort: metrics}
 ---
 apiVersion: apps/v1
 kind: Deployment
-metadata: {name: fanin-sink}
+metadata: {name: prento-sink}
 spec:
   replicas: 1
   selector:
-    matchLabels: {app: fanin-sink}
+    matchLabels: {app: prento-sink}
   template:
     metadata:
-      labels: {app: fanin-sink}
+      labels: {app: prento-sink}
     spec:
       securityContext:
         runAsNonRoot: true
@@ -77,14 +77,14 @@ spec:
 ---
 apiVersion: v1
 kind: Service
-metadata: {name: fanin-sink}
+metadata: {name: prento-sink}
 spec:
-  selector: {app: fanin-sink}
+  selector: {app: prento-sink}
   ports: [{port: 9001, targetPort: 9001}]
 ---
 apiVersion: batch/v1
 kind: Job
-metadata: {name: fanin-producers}
+metadata: {name: prento-producers}
 spec:
   parallelism: 4
   completions: 4
@@ -96,7 +96,7 @@ spec:
       containers:
         - name: producer
           image: prento:local
-          args: [producer, --target, "fanin-collector:9000", --admission, credit, --duration-ms, "10000", --rate, "100", --producers, "8", --output, /results/outcomes.csv]
+          args: [producer, --target, "prento-collector:9000", --admission, credit, --duration-ms, "10000", --rate, "100", --producers, "8", --output, /results/outcomes.csv]
           resources:
             requests: {cpu: 100m, memory: 32Mi}
             limits: {cpu: "1", memory: 128Mi}

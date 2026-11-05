@@ -1,0 +1,62 @@
+$ docker build --target runtime -t prento:local .
+#0 building with "default" instance using docker driver
+
+#1 [internal] load build definition from Dockerfile
+#1 transferring dockerfile: 1.57kB 0.1s done
+#1 DONE 0.1s
+
+#2 [internal] load metadata for docker.io/library/ubuntu:24.04
+#2 DONE 0.0s
+
+#3 [internal] load .dockerignore
+#3 transferring context: 32B
+#3 transferring context: 112B 0.0s done
+#3 DONE 0.1s
+
+#4 [build 1/8] FROM docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9
+#4 resolve docker.io/library/ubuntu:24.04@sha256:69cecf4bbf72d2d44a9eef1b71fb98c7fb973d78af11399deccef19beb008ad9 0.0s done
+#4 DONE 0.0s
+
+#5 [runtime 2/4] RUN apt-get update && apt-get install -y --no-install-recommends     libstdc++6 libgcc-s1 && rm -rf /var/lib/apt/lists/*     && mkdir /results && chown 10001:10001 /results
+#5 CACHED
+
+#6 [internal] load build context
+#6 transferring context: 539B 0.1s done
+#6 DONE 0.1s
+
+#7 [build 7/8] COPY tests/core_test.cpp ./tests/core_test.cpp
+#7 CACHED
+
+#8 [build 2/8] RUN apt-get update && apt-get install -y --no-install-recommends     g++ cmake ninja-build ca-certificates && rm -rf /var/lib/apt/lists/*
+#8 CACHED
+
+#9 [build 3/8] WORKDIR /src
+#9 CACHED
+
+#10 [build 4/8] COPY CMakeLists.txt ./
+#10 CACHED
+
+#11 [build 5/8] COPY include ./include
+#11 CACHED
+
+#12 [build 6/8] COPY src ./src
+#12 CACHED
+
+#13 [build 8/8] RUN cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release     && cmake --build build && ctest --test-dir build --output-on-failure
+#13 CACHED
+
+#14 [runtime 3/4] COPY --from=build /src/build/prento /usr/local/bin/prento
+#14 DONE 0.0s
+
+#15 [runtime 4/4] WORKDIR /tmp
+#15 DONE 0.0s
+
+#16 exporting to image
+#16 exporting layers 0.1s done
+#16 exporting manifest sha256:c2ff9b565aefe4ff7e17f28ac1cef4590ed63e096fbee9ec15e64f3a93f5be7c 0.0s done
+#16 exporting config sha256:244904b320aa1f1ff0d5d811c61d180d988c3e3f4df3f453415f1ac249d45105 0.0s done
+#16 exporting attestation manifest sha256:552aef61a5a88367c928fb2b2a774f2419af6cc172449c66cd72674bee22d5a8 0.0s done
+#16 exporting manifest list sha256:a0ea58e0a0068294fe660eb9ab492f5f5d512206577d6e8dea7a6bb9a18f3fd0 0.0s done
+#16 naming to docker.io/library/prento:local done
+#16 unpacking to docker.io/library/prento:local 0.0s done
+#16 DONE 0.2s

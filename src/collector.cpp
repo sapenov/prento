@@ -1,5 +1,5 @@
-#include "fanin/net.hpp"
-#include "fanin/threads.hpp"
+#include "prento/net.hpp"
+#include "prento/threads.hpp"
 #include <condition_variable>
 #include <deque>
 #include <iostream>
@@ -8,7 +8,7 @@
 #include <thread>
 #include <vector>
 
-namespace fanin {
+namespace prento {
 namespace {
 struct Gate {
     std::mutex mutex;
@@ -49,11 +49,11 @@ struct Gate {
     std::string metrics() {
         std::lock_guard lock(mutex);
         std::ostringstream out;
-        out<<"fanin_reserved_bytes "<<budget.used()<<"\nfanin_reserved_peak_bytes "<<budget.peak()
-           <<"\nfanin_buffer_limit_bytes "<<budget.limit()<<"\nfanin_admitted_total "<<admitted
-           <<"\nfanin_admitted_bytes_total "<<admitted_bytes
-           <<"\nfanin_completed_total "<<completed<<"\nfanin_failed_total "<<failed
-           <<"\nfanin_waiting_announcements "<<waiting.size()<<"\nfanin_ready_batches "<<ready.size()<<'\n';
+        out<<"prento_reserved_bytes "<<budget.used()<<"\nprento_reserved_peak_bytes "<<budget.peak()
+           <<"\nprento_buffer_limit_bytes "<<budget.limit()<<"\nprento_admitted_total "<<admitted
+           <<"\nprento_admitted_bytes_total "<<admitted_bytes
+           <<"\nprento_completed_total "<<completed<<"\nprento_failed_total "<<failed
+           <<"\nprento_waiting_announcements "<<waiting.size()<<"\nprento_ready_batches "<<ready.size()<<'\n';
         return out.str();
     }
 };

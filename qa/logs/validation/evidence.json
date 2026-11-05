@@ -1,0 +1,10 @@
+{
+  "trials": 144,
+  "matched_groups": 36,
+  "generated": 79236,
+  "completed": 79236,
+  "not_completed": 0,
+  "reservation_and_final_queue_invariants": "passed",
+  "matched_workloads_and_configuration": "passed",
+  "latency_decomposition": "passed"
+}

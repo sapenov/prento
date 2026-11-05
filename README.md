@@ -12,7 +12,7 @@ The benchmark covers four scenarios, four modes, three workload seeds and three 
 
 ## Testing and evidence
 
-Start with the [QA guide](qa/README.md) for checks, benchmark reproduction and a file map. The [verification summary](qa/VERIFICATION.md) lists recorded results and their evidence. Build a source-and-evidence ZIP with `make qa-bundle`; compiled binaries and Git metadata are excluded.
+Start with the [QA guide](qa/README.md) for checks, benchmark reproduction and a file map. The [verification summary](qa/VERIFICATION.md) lists recorded results and their evidence. Build a source-and-evidence ZIP with `make qa-bundle`; compiled binaries and Git metadata are excluded. The [measured source snapshot](qa/measurement-source/README.md) and archived results preserve the exact names and provenance used for the published benchmark.
 
 ## Run the three-service demo
 
@@ -62,7 +62,7 @@ Each run includes `outcomes.csv`, command/config JSON, process logs, sampled pro
 
 ## Native Linux / WSL
 
-Only GCC supporting C++20, Make and Python 3 are needed. There are no downloaded C++ libraries or Python packages.
+The executable is `prento` (`build/prento` after a Make build). Only GCC supporting C++20, Make and Python 3 are needed. There are no downloaded C++ libraries or Python packages.
 
 ```sh
 make test
@@ -70,7 +70,7 @@ make sanitize
 make bench
 ```
 
-Alternatively, `cmake -S . -B build-cmake && cmake --build build-cmake && ctest --test-dir build-cmake` builds the binary and core tests. Full process tests use `FANIN_BINARY=/absolute/path/to/fanin python3 -m unittest discover -s tests -p 'test_*.py' -v`.
+Alternatively, `cmake -S . -B build-cmake && cmake --build build-cmake && ctest --test-dir build-cmake` builds the binary and core tests. Full process tests use `PRENTO_BINARY=/absolute/path/to/prento python3 -m unittest discover -s tests -p 'test_*.py' -v`.
 
 Change the workload explicitly:
 
@@ -103,7 +103,7 @@ Each producer has one outstanding batch per connection. Only that next batch is 
 
 ## Workload and measurements
 
-Defaults: 16 producer connections, 100 generated batches/s globally, 5% critical messages by count, 256-byte critical messages and 32-KiB bulk batches. These are synthetic settings, not assertions about Splunk traffic. Traffic class and size can be configured independently. A fixed seed preserves message classes and assignment; OS scheduling and timings vary. Suite order is shuffled deterministically to reduce systematic order bias.
+Defaults: 16 producer connections, 100 generated batches/s globally, 5% critical messages by count, 256-byte critical messages and 32-KiB bulk batches. These synthetic settings do not represent a particular production workload. Traffic class and size can be configured independently. A fixed seed preserves message classes and assignment; OS scheduling and timings vary. Suite order is shuffled deterministically to reduce systematic order bias.
 
 - **Latency:** intended generation time through sink processing ACK, including producer waiting. Timestamp decomposition separates pre-send from post-send time; neither isolates collector queueing. Report means, observed maxima and counts. Empirical p50/p99/p99.9 remain inspectable in JSON.
 - **Outcomes:** exactly one CSV row per generated logical ID: `completed`, `producer_drop`, or `failed_unknown`. A failed/unknown delivery may have reached the sink, so never call it known loss or retry it as exactly-once.

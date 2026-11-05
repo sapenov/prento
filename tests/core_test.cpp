@@ -1,13 +1,13 @@
-#include "fanin/core.hpp"
-#include "fanin/threads.hpp"
-#include "fanin/timing.hpp"
+#include "prento/core.hpp"
+#include "prento/threads.hpp"
+#include "prento/timing.hpp"
 #include <atomic>
 #include <iostream>
 #include <stdexcept>
 
 void check(bool ok, const char* msg) { if (!ok) throw std::runtime_error(msg); }
 int main() {
-    using namespace fanin;
+    using namespace prento;
     try {
         Budget b(100);
         check(b.reserve(70), "initial reservation");

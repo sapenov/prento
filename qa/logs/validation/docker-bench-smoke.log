@@ -1,0 +1,6 @@
+$ docker run --rm --network none prento:bench --output /results/entrypoint-smoke --scenarios steady --seeds 7 --repeats 1 --duration-ms 100
+steady-seed-7-credit-fifo-1: generated=10 completed=10 drops=0 unknown=0
+steady-seed-7-push-priority-1: generated=10 completed=10 drops=0 unknown=0
+steady-seed-7-credit-priority-1: generated=10 completed=10 drops=0 unknown=0
+steady-seed-7-push-fifo-1: generated=10 completed=10 drops=0 unknown=0
+report: /results/entrypoint-smoke/REPORT.md

@@ -35,12 +35,14 @@ def check(directory):
             if summary[status] != config['producer_summary'][status]:
                 raise ValueError('terminal outcome mismatch: ' + str(path))
         counters = config['measurements']['collector_final_counters']
-        if not (0 <= counters['fanin_reserved_peak_bytes'] <= config['buffer_bytes']
-                and counters['fanin_reserved_bytes'] == 0
-                and counters['fanin_waiting_announcements'] == 0
-                and counters['fanin_ready_batches'] == 0):
+        # Archived trials retain their measured metric names; new runs use Prento.
+        prefix = 'prento_' if 'prento_reserved_peak_bytes' in counters else 'fanin_'
+        if not (0 <= counters[prefix + 'reserved_peak_bytes'] <= config['buffer_bytes']
+                and counters[prefix + 'reserved_bytes'] == 0
+                and counters[prefix + 'waiting_announcements'] == 0
+                and counters[prefix + 'ready_batches'] == 0):
             raise ValueError('reservation or final queue invariant: ' + str(path))
-        if counters['fanin_completed_total'] != summary['completed']:
+        if counters[prefix + 'completed_total'] != summary['completed']:
             raise ValueError('collector completion mismatch: ' + str(path))
         for stats in summary['classes'].values():
             if stats['completed'] and abs(stats['mean_pre_send_ms'] + stats['mean_post_send_ms'] - stats['mean_ms']) > 1e-8:

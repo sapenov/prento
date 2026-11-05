@@ -12,4 +12,4 @@ Use `scripts/report.py` at the repository root to render reports. It validates m
 
 The measured runner records one executable SHA-256 in the benchmark's `environment.json`. Its reports label the identity source `global-environment`. The repository runner can also record per-run executable SHA values. A suite-level identity and a per-run identity provide different provenance; the reporter makes that distinction explicit.
 
-The supplied application matches the measured-source fingerprints. Container inspection records include the state after benchmark exit. The source ZIP contains no compiled image or binary; build using the supplied Dockerfile.
+The [measured application snapshot](../measurement-source/README.md) matches the recorded source fingerprints. The live source uses Prento identifiers and has different fingerprints; performance tables refer to the measured snapshot. Container inspection records include the state after benchmark exit. The source ZIP contains no compiled image or binary; build using the supplied Dockerfile.

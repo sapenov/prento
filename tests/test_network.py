@@ -14,7 +14,7 @@ import unittest
 import urllib.request
 
 ROOT = Path(__file__).resolve().parents[1]
-BIN = Path(os.environ.get("FANIN_BINARY", ROOT / "build/fanin"))
+BIN = Path(os.environ.get("PRENTO_BINARY", ROOT / "build/prento"))
 
 def port():
     with socket.socket() as s:
@@ -51,7 +51,7 @@ class NetworkTest(unittest.TestCase):
         failures=[trace for case,trace in (*result.failures,*result.errors)
                   if getattr(case,'test_case',case) is self]
         if failures:
-            parent=Path(os.environ.get('FANIN_FAILURE_DIR',ROOT/'qa-local/failures'))
+            parent=Path(os.environ.get('PRENTO_FAILURE_DIR',ROOT/'qa-local/failures'))
             try:
                 parent.mkdir(parents=True,exist_ok=True)
                 destination=Path(tempfile.mkdtemp(prefix=self._testMethodName+'-',dir=parent))
@@ -117,8 +117,8 @@ class NetworkTest(unittest.TestCase):
                     self.assertTrue(all(float(r["latency_ms"]) >= 0 for r in rows))
                     with urllib.request.urlopen(f"http://127.0.0.1:{metrics}/metrics") as f:
                         values = dict(line.split() for line in f.read().decode().splitlines() if not line.startswith("#"))
-                    self.assertLessEqual(int(values["fanin_reserved_peak_bytes"]), 65536)
-                    self.assertEqual(int(values["fanin_reserved_bytes"]), 0)
+                    self.assertLessEqual(int(values["prento_reserved_peak_bytes"]), 65536)
+                    self.assertEqual(int(values["prento_reserved_bytes"]), 0)
 
     def test_sink_loss_produces_explicit_unknown_outcomes(self):
         sink, _, target, _ = self.stack(timeout=300)
@@ -181,7 +181,7 @@ class NetworkTest(unittest.TestCase):
             time.sleep(.4)
         with urllib.request.urlopen(f"http://127.0.0.1:{metrics}/metrics") as f:
             values = dict(line.split() for line in f.read().decode().splitlines())
-        self.assertEqual(int(values["fanin_reserved_bytes"]), 0)
+        self.assertEqual(int(values["prento_reserved_bytes"]), 0)
 
     def test_idle_sink_connection_can_be_reused(self):
         _, _, target, _ = self.stack()

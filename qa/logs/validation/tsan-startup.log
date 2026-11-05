@@ -1,0 +1,27 @@
+$ setarch x86_64 -R make tsan
+mkdir -p build
+g++ -Iinclude -std=c++20 -O1 -g -Wall -Wextra -Wpedantic -Werror -pthread -fsanitize=thread -fno-omit-frame-pointer -fno-pie -no-pie tests/core_test.cpp -o build/core-test-tsan
+./build/core-test-tsan
+core: 18 checks passed
+g++ -Iinclude -std=c++20 -O1 -g -Wall -Wextra -Wpedantic -Werror -pthread -fsanitize=thread -fno-omit-frame-pointer -fno-pie -no-pie src/main.cpp src/collector.cpp src/producer.cpp src/sink.cpp -o build/prento-tsan
+PRENTO_BINARY=<PROJECT_ROOT>/build/prento-tsan python3 -m unittest discover -s tests -p 'test_*.py' -v
+Traceback (most recent call last):
+  File "<frozen runpy>", line 198, in _run_module_as_main
+  File "<frozen runpy>", line 88, in _run_code
+  File "/usr/lib/python3.12/unittest/__main__.py", line 18, in <module>
+    main(module=None)
+  File "/usr/lib/python3.12/unittest/main.py", line 104, in __init__
+    self.parseArgs(argv)
+  File "/usr/lib/python3.12/unittest/main.py", line 130, in parseArgs
+    self._do_discovery(argv[2:])
+  File "/usr/lib/python3.12/unittest/main.py", line 253, in _do_discovery
+    self.createTests(from_discovery=True, Loader=Loader)
+  File "/usr/lib/python3.12/unittest/main.py", line 160, in createTests
+    self.test = loader.discover(self.start, self.pattern, self.top)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/unittest/loader.py", line 265, in discover
+    top_level_dir = os.path.abspath(top_level_dir)
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "<frozen posixpath>", line 420, in abspath
+FileNotFoundError: [Errno 2] No such file or directory
+make: *** [Makefile:34: tsan] Error 1

@@ -18,7 +18,7 @@ class DiagnosticsTest(unittest.TestCase):
 
         with tempfile.TemporaryDirectory() as tmp:
             destination=Path(tmp)/'failures'
-            with patch.dict(os.environ,FANIN_FAILURE_DIR=str(destination)), contextlib.redirect_stderr(io.StringIO()):
+            with patch.dict(os.environ,PRENTO_FAILURE_DIR=str(destination)), contextlib.redirect_stderr(io.StringIO()):
                 result=unittest.TestResult()
                 FailureProbe().run(result)
             self.assertEqual(len(result.failures),1)
