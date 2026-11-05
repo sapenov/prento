@@ -30,6 +30,8 @@ After renaming, native and Docker suites passed 18 core checks and 26 Python tes
 
 The Prento-named clean extraction passed strict verification, the full 144-trial audit and a fresh build with 18 core checks/26 Python tests. Log: `qa/logs/prento-clean-extraction.log`. Git attributes preserve exact source/evidence bytes; whitespace checks exclude retained raw report/log formatting. A staged-byte audit verified every file against its Git blob before publication.
 
+Public GitHub verification: [the corrected run](https://github.com/sapenov/prento/actions/runs/41965080263) passed native tests, ASan/UBSan, TSan and runtime Docker build on commit d62053f. The initial validation failure remains visible in history and its configuration fix is recorded in AGENT_WORKFLOW.md. Subsequent public README/handoff edits are documentation only and use skip-ci commits; no application/test source changed after the passing run. Structured evidence: `qa/logs/prento-github-ci.json`.
+
 ## Previous corrected-timer QA revision (historical)
 
 The following record and its logs describe the earlier 21-test revision. Its raw performance measurements are still current because application sources are unchanged.

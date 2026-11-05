@@ -20,6 +20,6 @@ Keep src/ and include/ unchanged so the existing 144-trial evidence remains appl
 - [x] Write failing bundle fixtures, implement clear counts and strict mode; verify the full suite.
 - [x] Update README, QA decisions, execution ledger and original completed checkboxes; add MIT and producer-latency estimate.
 - [x] Build/test updated Docker QA target and Compose wiring; preserve current evidence and produce a verified sanitized QA ZIP.
-- [ ] Independent final review; create and push public sapenov/prento if GitHub permissions allow; verify remote contents/CI and report exact status.
+- [x] Independent final review; create and push public sapenov/prento if GitHub permissions allow; verify remote contents/CI and report exact status.
 
 The owner selected Prento after naming exploration, with README pronunciation PREN-to and association prompt delivery and operational readiness. Current Docker tags/archive prefix use prento; immutable measurement records retain their original names.
